@@ -1,0 +1,20 @@
+######################################################################
+# Name:        MatrixLed                                             #
+# Purpose:     A LED Matrix Display                                  #
+#                                                                    #
+# Author:      Pinassi "O-Zone" Michele <o-zone@siena.linux.it>      #
+# Licence:     Same as wxPython's                                    #
+#                                                                    #
+# v1.0 - Initial Release                                             #
+#                                                                    #
+######################################################################
+
+Matrix.py is the LEDMatrix class
+
+TestMatrix.py is a simple test file for LEDMatrix
+
+Python and wxPython needed:
+www.python.org
+www.wxpython.org
+
+http://www.zerozone.it
