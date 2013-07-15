@@ -14,12 +14,12 @@ print "running with version:", wx.__version__
 import random
 
 
-class DrawWindow(wx.Panel):
+class DrawWindow(wx.Window):
     def __init__(self, parent, id = -1):
         ## Any data the Draw() function needs must be initialized before
         ## calling BufferedWindow.__init__, as it will call the Draw
         ## function.
-        wx.Panel.__init__(self, parent, id)
+        wx.Window.__init__(self, parent, id)
         
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
@@ -42,7 +42,6 @@ class DrawWindow(wx.Panel):
         if self.mouse_line is not None:
             dc.SetPen(wx.Pen('WHITE', 2, wx.SHORT_DASH))
             dc.DrawLinePoint( *self.mouse_line )
-
 
     def OnSize(self,event):
         # The Buffer init is done here, to make sure the buffer is always
@@ -89,37 +88,15 @@ class DrawWindow(wx.Panel):
         if event.Dragging() and event.LeftIsDown() and (self.mouse_line is not None):
             self.mouse_line[1] = event.GetPosition()
         self.Refresh()
-        self.Update()
+        ## note: "Update() is not recommended on wxMac -- but response is slower without it... "
+        #self.Update()
 
-
-class TestFrame(wx.Frame):
-    def __init__(self):
-        wx.Frame.__init__(self, None, -1, "ClientDC Test",
-                         wx.DefaultPosition,
-                         size=(500,500),
-                         style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
-
-        self.Window = DrawWindow(self)
-
-class DemoApp(wx.App):
-    def OnInit(self):
-        wx.InitAllImageHandlers() # called so a PNG can be saved      
-        frame = TestFrame()
-        frame.Show(True)
-
-        ## initialize a drawing
-        ## It doesn't seem like this should be here, but the Frame does
-        ## not get sized untill Show() is called, so it doesn't work if
-        ## it is put in the __init__ method.
-
-        #frame.NewDrawing(None)
-
-        self.SetTopWindow(frame)
-
-        return True
 
 if __name__ == "__main__":
-    app = DemoApp(0)
+    app = wx.App(False)
+    frame = wx.Frame(None, size = (400,500), title="Mouse Move Drawing Test")
+    draw_window = DrawWindow(frame)
+    frame.Show(True)
     app.MainLoop()
 
 
