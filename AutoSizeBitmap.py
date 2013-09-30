@@ -7,6 +7,7 @@ Example for how to have a bitmap autosize itself in wxPython
 """
 
 import wx
+print "using wxPython version:", wx.__version__
 
 class AutoSizeBitmap(wx.Window):
     """
@@ -36,7 +37,10 @@ class AutoSizeBitmap(wx.Window):
         
     def OnPaint(self, evt=None):
         dc = wx.PaintDC(self)
-        dc.DrawBitmap(self.bitmap,0,0)
+        try:
+            dc.DrawBitmap(self.bitmap,0,0)
+        except ValueError: # in case bitmap has not yet been initialized
+            pass
 
 if __name__ == "__main__":
     import sys
