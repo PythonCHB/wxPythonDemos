@@ -20,8 +20,7 @@ class AutoSizeBitmap(wx.Window):
         
         :param parent: parent Window for this window
         :param image: a wx.Image that you want to display
-        """
-        
+        """        
         wx.Window.__init__(self, parent, *args, **kwargs)
 
         self.orig_image = image
@@ -34,7 +33,8 @@ class AutoSizeBitmap(wx.Window):
         img = self.orig_image.Copy()
         img.Rescale(*self.Size)
         self.bitmap = wx.BitmapFromImage(img)
-        
+        self.Refresh()
+
     def OnPaint(self, evt=None):
         dc = wx.PaintDC(self)
         try:
