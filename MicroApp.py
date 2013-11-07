@@ -39,7 +39,7 @@ class DemoFrame(wx.Frame):
 
         self.SetMenuBar(MenuBar)
 
-        btn = wx.Button(self, label = "Quit")
+        btn = wx.Button(self, label = "Quit", pos=(40,60))
 
         btn.Bind(wx.EVT_BUTTON, self.OnQuit )
 
