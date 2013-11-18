@@ -145,8 +145,8 @@ def test_PuzzleGrid():
 
 class Grid:
     def __init__(self, w, h):
-        size = max( 100, min(w,h) )
-        self.d = d = (size - 20) / 9
+        size = min(w,h)
+        self.d = d = max( 2, (size - 20) / 9 )# make  sure we don't get zero...
         self.x0 = (w - (self.d * 9)) / 2
         self.y0 = (h - (self.d * 9)) / 2
         self.font_size = int(11 * d/16.0)
