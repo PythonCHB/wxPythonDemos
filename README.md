@@ -24,7 +24,7 @@ http://wiki.wxpython.org/index.cgi/wxPython_Style_Guide
 Despite these flaws, I think there is a lot to be learned from this
 collection.
 
-I suggest you search or grep for a widget you may want to learn somethign about, or just fire up each one and see what it does!
+I suggest you search or grep for a widget you may want to learn something about, or just fire up each one and see what it does!
 
 To Do
 ----------
