@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
-import os, sys
+import os
+import sys
 import wx
+
 
 class MyPanel(wx.Panel):
     def __init__(self, frame, id):
@@ -24,7 +26,6 @@ class MyPanel(wx.Panel):
         dc.SetBackground(wx.Brush("white"))
         dc.Clear()
         self.drawText(dc)
-        
 
     def OnMouseMove(self, event):
         if event.Dragging():
@@ -52,6 +53,7 @@ class MyPanel(wx.Panel):
 
         return None
 
+
 class MyFrame(wx.Frame):
     def __init__(self, parent, ID, title):
         wx.Frame.__init__(self, parent, ID, title, pos=(150, 150), size=(500, 400))
@@ -69,6 +71,7 @@ class MyApp(wx.App):
         self.SetTopWindow(frame)
         frame.Show(True)
         return True
+
 
 if __name__ == '__main__':
     app = MyApp(0)

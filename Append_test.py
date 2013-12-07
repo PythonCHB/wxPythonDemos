@@ -12,18 +12,18 @@ class MyFrame(wx.Frame):
                          wx.DefaultPosition,
                          size=(800,600),
                          style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
-       
-        self.objects = []        
+
+        self.objects = []
         self.dragImage = None
         self.DragPaper = None
-        self.hiliteObjects = None        
+        self.hiliteObjects = None
         self.lines = []
         self.maxWidth  = 1000
         self.maxHeight = 1000
         self.x = self.y = 0
         self.curLine = []
         self.drawing = False
-        
+
         self.Paper = wx.Bitmap("Paper.BMP", wx.BITMAP_TYPE_BMP)
         if self.Paper.Ok():
             print "bitmap loaded OK"
@@ -31,7 +31,7 @@ class MyFrame(wx.Frame):
             raise Exception("bitmap DID NOT load OK")
 
         self.DrawTextOnPaper()
-                
+
 #--------------------------------------------------------------------------
         if BUFFERED:
             self.buffer = wx.EmptyBitmap(self.maxWidth, self.maxHeight)
@@ -60,27 +60,27 @@ class MyFrame(wx.Frame):
         dc.SetFont(wx.Font(36, wx.MODERN, wx.NORMAL, wx.NORMAL, 0, "Arial"))
         dc.SetTextForeground(wx.BLACK)
         dc.DrawText(text, 155, 25)
-        
+
     def DoDrawing(self, dc, printing=False):
-        dc.BeginDrawing()    
-        
+        dc.BeginDrawing()
+
 ##        l1 = ['a','b','c','d']
 ##        text = " "+"".join(l1)
 ##        bg_colour = wx.Colour(57, 115, 57)  # matches the bg image
 ##        dc.SetFont(wx.Font(36, wx.MODERN, wx.NORMAL, wx.NORMAL, 0, "Arial"))
 ##        dc.SetTextForeground(wx.BLACK)
 ##        te = dc.GetTextExtent(text)
-        
-        
+
+
         dc.DrawBitmap(self.Paper, 200, 20, True)
-        
-                
+
+
         #dc = wx.MemoryDC()
         #dc.SelectObject(self.manuscript)
         #self.DoDrawing(dc)
-        
+
 ##        dc.DrawText(text, 225, 25)
-        
+
         dc.EndDrawing()
 #--------------------------------------------------------------------------
 class MyApp(wx.App):
@@ -95,4 +95,3 @@ class MyApp(wx.App):
 if __name__ == "__main__":
     app = MyApp(0)
     app.MainLoop()
-

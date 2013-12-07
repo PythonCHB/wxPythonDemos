@@ -10,7 +10,8 @@ I've added stuff for non-mac platfroms based on code posted by Chris Mellon
 """
 
 import wx
-print wx.version()
+print(wx.version())
+
 
 class TestPanel(wx.Panel):
     def __init__(self, *args, **kw):
@@ -27,7 +28,7 @@ class TestPanel(wx.Panel):
     def OnPaint(self, evt):
         # Just some simple stuff to paint in the window for an example
         dc = wx.PaintDC(self)
-        coords = ((40,40),(200,220),(210,120),(120,300))
+        coords = ((40, 40), (200, 220), (210, 120), (120, 300))
         dc.SetBackground(wx.Brush("sky blue"))
         dc.Clear()
 
@@ -38,17 +39,15 @@ class TestPanel(wx.Panel):
                     "a rubber-band effect using wx.Overlay",
                     (140, 50, -1, -1))
 
-
     def OnLeftDown(self, evt):
         # Capture the mouse and save the starting posiiton for the
         # rubber-band
         self.CaptureMouse()
         self.startPos = evt.GetPosition()
 
-
     def OnMouseMove(self, evt):
         if not self.HasCapture():
-            return        
+            return
         rect = wx.RectPP(self.startPos, evt.GetPosition())
         # Draw the rubber-band rectangle using an overlay so it
         # will manage keeping the rectangle and the former window
@@ -56,9 +55,9 @@ class TestPanel(wx.Panel):
         dc = wx.ClientDC(self)
         odc = wx.DCOverlay(self.overlay, dc)
         odc.Clear()
-            
+
         pen = wx.Pen("black", 2)
-        brush = wx.Brush(wx.Color(192,192,192,128))
+        brush = wx.Brush(wx.Colour(192, 192, 192, 128))
         if "wxMac" in wx.PlatformInfo:
             dc.SetPen(pen)
             dc.SetBrush(brush)
@@ -74,7 +73,6 @@ class TestPanel(wx.Panel):
         del odc # work around a bug in the Python wrappers to make
                 # sure the odc is destroyed before the dc is.
 
-
     def OnLeftUp(self, evt):
         if self.HasCapture():
             self.ReleaseMouse()
@@ -88,13 +86,15 @@ class TestPanel(wx.Panel):
         del odc
         self.overlay.Reset()
 
-app = wx.App(redirect=False)
-frm = wx.Frame(None, title="wx.Overlay Test", size=(450,450))
-#work around flicker on MSW - setting transparency 
-#turns on window compositing, which allows for buffering
-#of clientDC drawing
-if "wxMSW" in wx.PlatformInfo:
-    frm.SetTransparent(254)
-pnl = TestPanel(frm)
-frm.Show()
-app.MainLoop()
+
+if __name__ == "__main__":
+    app = wx.App(redirect=False)
+    frm = wx.Frame(None, title="wx.Overlay Test", size=(450, 450))
+    #work around flicker on MSW - setting transparency
+    #turns on window compositing, which allows for buffering
+    #of clientDC drawing
+    if "wxMSW" in wx.PlatformInfo:
+        frm.SetTransparent(254)
+    pnl = TestPanel(frm)
+    frm.Show()
+    app.MainLoop()

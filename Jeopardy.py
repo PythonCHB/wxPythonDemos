@@ -16,6 +16,7 @@ This code is in the public domain
 
 import wx
 
+
 class Question(object):
     """
     A class to hold each question, and data about it.
@@ -34,7 +35,7 @@ class Game:
         self.questions = questions
         self.num_cat = len(catagories)
         self.num_ques = len(questions[0])
-        
+
     def all_answered(self):
         """
         returns True if all the questions are answered
@@ -55,7 +56,7 @@ class GridGeom:
         self.box_h = h / (num_questions + 1)
         self.num_cat = num_catagories
         self.num_ques = num_questions
-        
+
         self.font_size = min( int(self.box_w / 2), int(self.box_h / 2) )
 
         ##figure out the text offset
@@ -70,8 +71,9 @@ class GridGeom:
         self.text_off_x = ( self.box_w - w ) / 2
         self.text_off_y = ( self.box_h - h ) / 2
 
-class GridWindow(wx.Window):  
-    def __init__(self, parent, game): 
+        
+class GridWindow(wx.Window):
+    def __init__(self, parent, game):
         wx.Window.__init__(self, parent)
         self.SetBackgroundColour("White")
 
@@ -79,25 +81,25 @@ class GridWindow(wx.Window):
 
         ## a few initalzers
         self.Selected = None
-        
+
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.Bind(wx.EVT_MOTION, self.OnMotion)
 
         self.OnSize()
-    
+
     def InitBuffer(self):
-        w, h = self.GetClientSize()        
+        w, h = self.GetClientSize()
         self.buffer = wx.EmptyBitmap(w, h)
         self.DrawNow()
-    
+
     def OnSize(self, event=None):
         size = self.GetClientSize()
         if size[0] > 0 and size[1] > 1:
             self.grid = GridGeom(*size)
             self.InitBuffer()
-    
+
     def DrawNow(self):
         dc = wx.MemoryDC()
         dc.SelectObject(self.buffer)
@@ -106,7 +108,7 @@ class GridWindow(wx.Window):
         self.Update()
 #        dc = wx.BufferedDC(wx.ClientDC(self), self.buffer)
 #        self.Draw(dc)
-    
+
     def Draw(self, dc):
         # Make grid local:
         grid = self.grid
@@ -124,14 +126,14 @@ class GridWindow(wx.Window):
                                         wx.FONTFAMILY_SWISS,
                                         wx.FONTSTYLE_NORMAL,
                                         wx.FONTWEIGHT_BOLD))
-        
+
         for i, cat in enumerate(self.game.catagories):
-            dc.SetBrush( wx.Brush("Blue", wx.SOLID) )
-            dc.SetPen( wx.Pen("White", width=4) )
+            dc.SetBrush(wx.Brush("Blue", wx.BRUSHSTYLE_SOLID) )
+            dc.SetPen(wx.Pen("White", width=4) )
             dc.DrawRectangle(i*w + 3, h + 3, w - 6, h - 6 )
             dc.DrawText(cat, i*w + grid.text_off_x, h + grid.text_off_y)
 
-        
+
         #draw cells
         dc.SetFont(wx.FontFromPixelSize((grid.font_size, grid.font_size),
                                         wx.FONTFAMILY_SWISS,
@@ -141,12 +143,12 @@ class GridWindow(wx.Window):
             for j, q in enumerate(cat):
                 j+=1
                 if q.answered:
-                    dc.SetBrush( wx.Brush("Blue", wx.SOLID) )
+                    dc.SetBrush(wx.Brush("Blue", wx.BRUSHSTYLE_SOLID))
                     dc.SetPen( wx.Pen("Black", width=4) )
                     dc.DrawRectangle(i*w + 3, j*h + 3, w - 6, h - 6 )
                 else:
-                    dc.SetBrush( wx.Brush("Blue", wx.SOLID) )
-                    dc.SetPen( wx.Pen("White", width=4) )
+                    dc.SetBrush(wx.Brush("Blue", wx.BRUSHSTYLE_SOLID))
+                    dc.SetPen(wx.Pen("White", width=4))
                     dc.DrawRectangle(i*w + 3, j*h + 3, w - 6, h - 6 )
                     dc.DrawText('%i'%q.value, i*w + grid.text_off_x, j*h + grid.text_off_y)
 
@@ -155,7 +157,7 @@ class GridWindow(wx.Window):
         # # draw the selected cells:
         # dc.SetBrush(wx.Brush("Red", wx.SOLID))
         # dc.DrawRectangle(x0 + d*self.Selected[1], y0 + d*self.Selected[0], d, d)
-                    
+
         # # draw the white lines:
         # dc.SetPen(wx.Pen("White", 2, wx.SOLID) )
         # for i in range(10):
@@ -181,8 +183,8 @@ class GridWindow(wx.Window):
         # for i in range(4):
         #     dc.DrawLine(x0, y0 + d*i, x0 + d*3, y0 + d*i)
         #     dc.DrawLine(x0 + d*i, y0, x0 + d*i, y0 + d*3)
-            
-   
+
+
     def OnPaint(self, event):
         dc = wx.BufferedPaintDC(self, self.buffer)
 
@@ -229,20 +231,20 @@ class GridWindow(wx.Window):
     #         i = 0
     #     if i < 0:
     #         i = 8
-                
+
     #     self.Selected = (i,j)
     #     self.DrawNow()
-    
+
     # def SetValue(self, value):
     #     self.Puzzle.Grid[self.Selected] = value
-        
+
 class MainFrame(wx.Frame):
     def __init__(self, parent, game):
         wx.Frame.__init__(self, parent, title="Jeopardy", size=(600, 500))
         self.game = game
         self.grid = GridWindow(self, game)
         #self.ToolBar()
-    
+
 #    def ToolBar(self):
 #        statusBar = self.CreateStatusBar()
 #        menuBar = wx.MenuBar()
@@ -269,11 +271,11 @@ class Header(object):
     FaceName = ''
 
     def __init__(self, text):
-        
+
         self.width = 100
         self.font_size = 12
         self.text = text
-        
+
         self.wrap_to_width()
         self.PadSize = 2
 
@@ -378,32 +380,32 @@ class Header(object):
 #        self.BoxHeight = BoxHeight
 #        self.CalcBoundingBox()
 
-        
+
     def draw(self, DC):
         for word in question:
             pass
-            
+
 
 class TestFrame(wx.Frame):
     def __init__(self, *args, **kwargs):
         wx.Frame.__init__(self, *args, **kwargs)
-        
+
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         #self.header = Header("This is a pretty long question that will need to wrap")
 
         #header.wrap_to_width
         #print header.question_lines
-               
+
     def OnPaint(self, evt):
         dc = wx.PaintDC(self)
         #if self.header is not None:
         #    self.header.draw(dc)
-            
+
 
 if __name__ == '__main__':
     A = wx.App()
     F = TestFrame(None, title="test frame")
-    A.mainloop()
+    A.MainLoop()
 
 if False:
 

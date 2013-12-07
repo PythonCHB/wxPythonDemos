@@ -77,6 +77,7 @@ class TestFrame(wx.Frame):
     def OnQuit(self,event):
         self.Close(True)
 
+
 class DemoApp(wx.App):
     def OnInit(self):
         frame = TestFrame()
@@ -84,6 +85,7 @@ class DemoApp(wx.App):
         self.SetTopWindow(frame)
 
         return True
+
 
 if __name__ == "__main__":
     app = DemoApp(0)

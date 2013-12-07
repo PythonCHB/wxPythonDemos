@@ -1,16 +1,17 @@
-#!/usr/bin/env python2.4
+#!/usr/bin/env python
 
 import wx
 
+
 class DemoFrame(wx.Frame):
     """ This window displays a button """
-    def __init__(self, title = "Micro App"):
-        wx.Frame.__init__(self, None , -1, title)#, size = (800,600), style=wx.DEFAULT_FRAME_STYLE|wx.NO_FULL_REPAINT_ON_RESIZE)
+    def __init__(self, title="Micro App"):
+        wx.Frame.__init__(self, None , -1, title)
 
         MenuBar = wx.MenuBar()
 
         FileMenu = wx.Menu()
-        
+
         item = wx.MenuItem(FileMenu, wx.ID_ANY, "&Quit")
         FileMenu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnQuit, item)
@@ -18,8 +19,9 @@ class DemoFrame(wx.Frame):
         MenuBar.Append(FileMenu, "&File")
         self.SetMenuBar(MenuBar)
 
+        panel = wx.Panel(self, -1)
 
-        RB = wx.RadioBox(self,
+        RB = wx.RadioBox(panel,
                          -1,
                          "Hedges",
                          wx.DefaultPosition,
@@ -28,21 +30,16 @@ class DemoFrame(wx.Frame):
                           "VICINITY", "GENERALLY", "CLOSE", "NOT", "SOMEWHAT", "VERY", "EXTREMELY",
                           "SLIGHTLY", "AFTER", "BEFORE"],
                          2,
-                         wx.RA_SPECIFY_COLS) 
+                         wx.RA_SPECIFY_COLS)
 
-        wx.EVT_CLOSE(self,self.OnQuit)
+        self.Bind(wx.EVT_CLOSE, self.OnQuit)
 
-        self.Fit()
-        
     def OnQuit(self,Event):
         self.Destroy()
 
-app = wx.PySimpleApp(0)
-frame = DemoFrame()
-frame.Show()
-app.MainLoop()
 
-
-
-
-
+if __name__ == '__main__':
+    app = wx.App(0)
+    frame = DemoFrame()
+    frame.Show()
+    app.MainLoop()

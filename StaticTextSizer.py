@@ -1,12 +1,8 @@
-#!/usr/bin/env python2.3
-
-import wxversion
-wxversion.select("2.5.3")
-#wxversion.select("2.5.1")
-#wxversion.select("2.4")
+#!/usr/bin/env python
 
 import wx
-#print "Using version:", wx.__version__
+print("running wx version:", wx.version())
+
 
 class DemoFrame(wx.Frame):
     """ This window displays a button """
@@ -20,7 +16,7 @@ class DemoFrame(wx.Frame):
         text = wx.TextCtrl(self, wx.NewId())
 
         btn = wx.Button(self, wx.NewId(), "Resize")
-        wx.EVT_BUTTON(self, btn.GetId(), self.OnChange )
+        btn.Bind(wx.EVT_BUTTON, self.OnChange)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(title, 0, wx.ALL | wx.ALIGN_CENTER, 4)
@@ -35,26 +31,23 @@ class DemoFrame(wx.Frame):
         self.Labels = ["One label",
                        "Another Label",
                        "Yet Another Label",
-                       "A now a really really long one",
+                       "A now a really%s long one" %(' really' * 10),
                        "A short one",
                        "short"]
         self.Curlabel = 0
-        
+
     def OnChange(self,Event):
         self.Curlabel += 1
         if self.Curlabel > len(self.Labels)-1:
             self.Curlabel = 0
         self.Static.SetLabel(self.Labels[self.Curlabel])
         self.sizer.SetItemMinSize(self.Static, self.Static.GetBestSize() )
-        #self.sizer.Layout()
+        self.sizer.Layout()
         self.Fit()
 
-app = wx.PySimpleApp(0)
-frame = DemoFrame()
-frame.Show()
-app.MainLoop()
 
-
-
-
-
+if __name__ == "__main__":
+    app = wx.App(0)
+    frame = DemoFrame()
+    frame.Show()
+    app.MainLoop()

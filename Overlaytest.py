@@ -6,8 +6,9 @@ A test of temporatry drawing using a method called from OnPaint
 """
 
 import wx
-print wx.__version__
+print(wx.version())
 import random
+
 
 class BufferedWindow(wx.Window):
 
@@ -27,7 +28,7 @@ class BufferedWindow(wx.Window):
 
     """
 
-    
+
     def __init__(self, parent, id,
                  pos = wx.DefaultPosition,
                  size = wx.DefaultSize,
@@ -42,7 +43,7 @@ class BufferedWindow(wx.Window):
         # platforms at initialization, but little harm done.
         self.OnSize(None)
 
-    def Draw(self,dc):
+    def Draw(self, dc):
         ## just here as a place holder.
         ## This method should be over-ridden when subclassed
         pass
@@ -53,29 +54,29 @@ class BufferedWindow(wx.Window):
         of the buffer, like during Mouse actions, etc.
         """
         pass
-        
+
     def OnPaint(self, event):
-        print "In OnPaint"
+        print("In OnPaint")
         # All that is needed here is to draw the buffer to screen
         dc = wx.PaintDC(self)
-        dc.DrawBitmap(self._Buffer,0,0)
+        dc.DrawBitmap(self._Buffer, 0, 0)
         self.TempDraw(dc)
 
     def OnSize(self,event):
         # The Buffer init is done here, to make sure the buffer is always
         # the same size as the Window
-        Size  = self.GetClientSizeTuple()
+        Size = self.GetClientSizeTuple()
 
         # Make sure we don't try to create a 0 size bitmap
         Size = (max(Size[0], 1), max(Size[1], 1))
-        self._Buffer = wx.EmptyBitmap(Size[0],Size[1])
+        self._Buffer = wx.EmptyBitmap(Size[0], Size[1])
         self.UpdateDrawing()
 
-    def SaveToFile(self,FileName,FileType):
+    def SaveToFile(self, FileName, FileType):
         ## This will save the contents of the buffer
-        ## to the specified file. See the wxWindows docs for 
+        ## to the specified file. See the wxWindows docs for
         ## wx.Bitmap::SaveFile for the details
-        self._Buffer.SaveFile(FileName,FileType)
+        self._Buffer.SaveFile(FileName, FileType)
 
     def UpdateDrawing(self):
         """
@@ -92,22 +93,22 @@ class BufferedWindow(wx.Window):
         dc.SelectObject(self._Buffer)
         self.Draw(dc)
         # update the screen
-        wx.ClientDC(self).DrawBitmap(self._Buffer,0,0)
+        wx.ClientDC(self).DrawBitmap(self._Buffer, 0, 0)
+
 
 class DrawWindow(BufferedWindow):
-    def __init__(self, parent, id = -1):
+    def __init__(self, parent, id=-1):
         ## Any data the Draw() function needs must be initialized before
         ## calling BufferedWindow.__init__, as it will call the Draw
         ## function.
         BufferedWindow.__init__(self, parent, id)
-        
 
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_MOTION, self.OnMove)
 
         self.StartMove = None
-        
+
         self.overlay = wx.Overlay()
 
     def OnLeftDown(self, event):
@@ -127,7 +128,6 @@ class DrawWindow(BufferedWindow):
         #del odc
         self.overlay.Reset()
 
-
     def OnMove(self, event):
         if event.Dragging() and event.LeftIsDown() and self.StartMove is not None:
             pos = event.GetPosition()
@@ -139,15 +139,15 @@ class DrawWindow(BufferedWindow):
             dc.SetPen(wx.Pen('WHITE', 2))
             dc.SetBrush(wx.TRANSPARENT_BRUSH)
             dc.DrawLinePoint(self.StartMove, pos)
-            dc.SetPen(wx.Pen('BLACK', 2, wx.SHORT_DASH))
+            dc.SetPen(wx.Pen('BLACK', 2, wx.PENSTYLE_SHORT_DASH))
             dc.DrawLinePoint(self.StartMove, pos)
 
             del odc # to ensure it gets delted before the Client
-        
+
     def Draw(self, dc):
-        coords = ((40,40),(200,220),(210,120),(120,300))
+        coords = ((40, 40), (200, 220), (210, 120), (120, 300))
         dc.BeginDrawing()
-        dc.SetBackground( wx.Brush("Blue") )
+        dc.SetBackground(wx.Brush("Blue"))
         dc.Clear() # make sure you clear the bitmap!
 
         dc.SetPen(wx.RED_PEN)
@@ -161,35 +161,17 @@ class TestFrame(wx.Frame):
         wx.Frame.__init__(self, *args, **kwargs)
         self.Window = DrawWindow(self)
 
+
 class DemoApp(wx.App):
     def OnInit(self):
-        wx.InitAllImageHandlers() # called so a PNG can be saved      
-        frame = TestFrame(None, title="OverlayTest", size=(500,500))
+        frame = TestFrame(None, title="OverlayTest", size=(500, 500))
         frame.Show(True)
 
         self.SetTopWindow(frame)
 
         return True
 
+
 if __name__ == "__main__":
     app = DemoApp(0)
     app.MainLoop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

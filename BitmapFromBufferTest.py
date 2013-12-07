@@ -12,10 +12,10 @@ import wx
 class BitmapWindow(wx.Window):
     def __init__(self, parent, bytearray, *args, **kwargs):
         wx.Window.__init__(self, parent, *args, **kwargs)
-        
+
         self.bytearray = bytearray
         self.Bind(wx.EVT_PAINT, self.OnPaint)
-        
+
     def OnPaint(self, evt):
         dc = wx.PaintDC(self)
         bmp = wx.BitmapFromBufferRGBA(200,200, self.bytearray)

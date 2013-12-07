@@ -1,76 +1,48 @@
-#!/usr/bin/env python2.4
+#!/usr/bin/env python
 
-from wxPython.wx import *
+import wx
 
 
-class MyCanvas(wxScrolledWindow):
-    def __init__(self, parent, id = -1, size = wxDefaultSize):
-        wxScrolledWindow.__init__(self, parent, id , wxPoint(0, 0), size, wxSUNKEN_BORDER)
-        ##wxScrolledWindow.__init__(self, parent)
-        ## read the image in (this is not a good place to do this in a real app)
+class MyCanvas(wx.ScrolledWindow):
+    def __init__(self, parent, id):
+        wx.ScrolledWindow.__init__(self, parent, id, wx.Point(0, 0), wx.DefaultSize, wx.SUNKEN_BORDER)
 
-        print "about to Init"
+        self.bmp = wx.Bitmap('Images/white_tank.jpg', wx.BITMAP_TYPE_JPEG)
 
-        wxInitAllImageHandlers()
+        self.maxWidth, self.maxHeight = self.bmp.GetWidth(), self.bmp.GetHeight()
 
-        print "done initing"
+        self.SetScrollbars(20, 20, self.maxWidth / 20, self.maxHeight / 20)
 
-        #img = wxImage("white_tank.jpg",wxBITMAP_TYPE_JPEG )
-        #img = wxImage("white_tank.jpg")
-        #bmp = img.ConvertToBitmap()
-        #jpg = wxImage(opj('bitmaps/image.jpg'), wxBITMAP_TYPE_JPEG).ConvertToBitmap()
+        ## parent.SetMaxSize((self.maxWidth, self.maxHeight))
 
-        self.bmp = wxImage('Images/white_tank.jpg', wxBITMAP_TYPE_JPEG ).ConvertToBitmap()
-
-        print "done loading image"
-
-        self.maxWidth, self.maxHeight  = self.bmp.GetWidth(), self.bmp.GetHeight()
-
-        self.SetScrollbars(20, 20, self.maxWidth/20, self.maxHeight/20)
-
-        EVT_PAINT(self, self.OnPaint)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
     def OnPaint(self, event):
-        dc = wxPaintDC(self)
+        dc = wx.PaintDC(self)
         self.PrepareDC(dc)
         dc.DrawBitmap(self.bmp, 0, 0)
 
 
-class TestFrame(wxFrame):
-    def __init__(self,parent, id,title,position,size):
-        wxFrame.__init__(self,parent, id,title,position, size)
+class TestFrame(wx.Frame):
+    def __init__(self, parent, id, title, position, size):
+        wx.Frame.__init__(self, parent, id, title, position, size)
 
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
-        EVT_CLOSE(self, self.OnCloseWindow)
-
-
-        self.Canvas1 = MyCanvas(self, wxNewId() )
+        self.Canvas1 = MyCanvas(self, wx.NewId())
 
     def OnCloseWindow(self, event):
         self.Destroy()
 
-class App(wxApp):
+
+class App(wx.App):
     def OnInit(self):
-        frame = TestFrame(NULL, -1, "Scroll Test", wxDefaultPosition,(550,200))
+        frame = TestFrame(None, -1, "Scroll Test", wx.DefaultPosition, (550, 400))
         self.SetTopWindow(frame)
         frame.Show(True)
-        return true
+        return True
+
 
 if __name__ == "__main__":
-
     app = App(0)
-    print "about to start Mainloop"
-
     app.MainLoop()
-     
-
-
-
-
-
-
-
-
-
-
-

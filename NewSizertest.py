@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.4
+#!/usr/bin/env python
 
 """
 
@@ -8,6 +8,7 @@ pythonic than the raw wxWidgets interface.
 """
 
 import wx
+
 
 class PyBoxSizer(wx.BoxSizer):
     """
@@ -70,28 +71,29 @@ class PyBoxSizer(wx.BoxSizer):
             flags |= wx.ALIGN_RIGHT
 
         flags |= Borders
-        flags |= ExtraFlags  
+        flags |= ExtraFlags
 
-        print "Calling old Add:", (proportion, flags, BorderSize)
+        print("Calling old Add:", (proportion, flags, BorderSize))
         self.OldAdd(Widget, proportion, flags, BorderSize)
-     
+
+
 class MyDialog(wx.Dialog):
 
     """
     A simple app to test the new sizer API
-	
+
     """
-    
+
     def __init__(self, *args, **kwargs):
         wx.Dialog.__init__(self, *args, **kwargs)
-	
+
         # Create a vertical BoxSizer for the Main Sizer
-        topsizer = PyBoxSizer( wx.VERTICAL )
+        topsizer = PyBoxSizer(wx.VERTICAL)
 
         # Create text ctrl with minimum size 100x60
         textBox = wx.TextCtrl(self,
                              value="My text.",
-                             size=(300,100),
+                             size=(300, 100),
                              style=wx.TE_MULTILINE)
 
         # Add the text control
@@ -103,7 +105,7 @@ class MyDialog(wx.Dialog):
                      Borders = wx.ALL,
                      BorderSize = 10,
                      ExtraFlags = wx.ADJUST_MINSIZE)
-        
+
         # Create a Horizontal Sizer for the Buttons
         button_sizer = PyBoxSizer(wx.HORIZONTAL)
         button_sizer.Add(wx.Button(self, wx.ID_OK),
@@ -112,16 +114,15 @@ class MyDialog(wx.Dialog):
         button_sizer.Add(wx.Button(self, wx.ID_CANCEL),
                          Borders=wx.ALL,
                          BorderSize=10 )
-        
-        topsizer.Add(button_sizer, AlignmentHorizontal = wx.RIGHT)
-        
+
+        topsizer.Add(button_sizer, AlignmentHorizontal=wx.RIGHT)
+
         self.SetSizerAndFit(topsizer)
+
 
 if __name__=='__main__':
     App = wx.App()
-    #AppFrame().Show()
-    dlg = MyDialog(None, title="Test Dialog", style=wx.RESIZE_BORDER )
+    dlg = MyDialog(None, title="Test Dialog", style=wx.RESIZE_BORDER)
     dlg.ShowModal()
     dlg.Destroy()
     App.MainLoop()
-

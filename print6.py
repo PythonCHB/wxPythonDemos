@@ -1,63 +1,66 @@
-#! /usr/bin/env python2.4
-import wxPython
-from wxPython.wx import *
-print wxPython.__version__
+#! /usr/bin/env python
+
+import wx
+print(wx.version())
 import sys
 
 #---------------------------------------------------------------------------
 
+
 def RunTest(panel,frame):
-    pd = wxPrintData()
-    pdd = wxPrintDialogData()
+    pd = wx.PrintData()
+    pdd = wx.PrintDialogData()
     pdd.SetPrintData(pd)
-    printer = wxPrinter(pdd)
+    printer = wx.Printer(pdd)
     printout = MyPrintout()
     printout2 = MyPrintout()
 
-    preview = wxPrintPreview(printout, printout2)
+    preview = wx.PrintPreview(printout, printout2)
+    preview.SetZoom(90)
     if not preview.Ok():
-        print 'preview error'
+        print('preview error')
         return
-    frame2 = wxPreviewFrame(preview, frame, "This is a print preview")
+    frame2 = wx.PreviewFrame(preview, frame, "This is a print preview")
     frame2.Initialize()
     frame2.SetPosition(frame.GetPosition())
     frame2.SetSize(frame.GetSize())
-    wxCallAfter(frame2.Show,true)
+    wx.CallAfter(frame2.Show, True)
 
 #----------------------------------------------------------------------
 
-class MyPrintout(wxPrintout):
+
+class MyPrintout(wx.Printout):
     def __init__(self, canvas=None):
-        wxPrintout.__init__(self)
+        wx.Printout.__init__(self)
         self.end_pg = 1
 
     def OnBeginDocument(self, start, end):
-        return self.base_OnBeginDocument(start, end)
+        return wx.Printout.OnBeginDocument(self, start, end)
 
     def OnEndDocument(self):
-        self.base_OnEndDocument()
+        wx.Printout.OnEndDocument(self)
 
     def HasPage(self, page):
         return (page <= self.end_pg)
 
     def GetPageInfo(self):
-        return (1,1,1,1)
+        return (1, 1, 1, 1)
 
     def OnPreparePrinting(self):
-        self.base_OnPreparePrinting()
+        wx.Printout.OnPreparePrinting(self)
 
     def OnBeginPrinting(self):
-        self.base_OnBeginPrinting()
+        wx.Printout.OnBeginPrinting(self)
 
     def OnPrintPage(self, page):
         dc = self.GetDC()
         if self.IsPreview():
-            print "in previewmode"
+            print("in previewmode")
         else:
-            print "in printing mode"
+            print("in printing mode")
         PPI = dc.GetPPI()
-        print "PPI=", PPI
-        print repr(PPI)
+        print("PPI=", PPI)
+        print(repr(PPI))
 
         ## fixme: this shouldn't be hardcoded here
         topmargin, leftmargin = 1, 1 # inches
@@ -73,18 +76,18 @@ class MyPrintout(wxPrintout):
 ##            else:
 ##                point = 12  #      ditto
         point = 12
-        font = wxFont(point,wxMODERN,wxNORMAL,wxNORMAL)
+        font = wx.Font(point, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
         dc.SetFont(font)
         height = dc.GetTextExtent('X')[1]
-        print "TextExtent", dc.GetTextExtent('X')
+        print("TextExtent", dc.GetTextExtent('X'))
 
-        lineskip = 1.2*height
-        font.SetWeight(wxBOLD)
+        lineskip = 1.2 * height
+        font.SetWeight(wx.FONTWEIGHT_BOLD)
         dc.SetFont(font)
         height = dc.GetTextExtent('X')[1]
         line = 0
         dc.DrawText('This is a heading '+sys.platform,leftmargin,topmargin+int(line*lineskip))
-        font.SetWeight(wxLIGHT)
+        font.SetWeight(wx.FONTWEIGHT_LIGHT)
         dc.SetFont(font)
         line = 2
         dc.DrawText('This is a detail line wxMODERN',leftmargin,topmargin+int(line*lineskip))
@@ -99,36 +102,36 @@ class MyPrintout(wxPrintout):
 
 #----------------------------------------------------------------------
 
-class TestPanel(wxPanel):
+class TestPanel(wx.Panel):
     def __init__(self, frame):
-        wxPanel.__init__(self, frame, -1)
-        RunTest(self,frame)
+        wx.Panel.__init__(self, frame, -1)
+        RunTest(self, frame)
 
 #----------------------------------------------------------------------
 
-class App(wxApp):
+class App(wx.App):
     def OnInit(self):
-        wxInitAllImageHandlers()
-        frame = wxFrame(None, -1, "Printing test", size=(530,400),
-                        style=wxNO_FULL_REPAINT_ON_RESIZE|wxDEFAULT_FRAME_STYLE)
+        frame = wx.Frame(None, -1, "Printing test", size=(530, 400),
+                        style=wx.NO_FULL_REPAINT_ON_RESIZE | wx.DEFAULT_FRAME_STYLE)
         self.frame = frame
         frame.CreateStatusBar()
-        menuBar = wxMenuBar()
-        menu = wxMenu()
+        menuBar = wx.MenuBar()
+        menu = wx.Menu()
         menu.Append(101, "E&xit\tAlt-X", "Exit demo")
-        EVT_MENU(self, 101, self.OnButton)
+        self.Bind(wx.EVT_MENU, self.OnButton, id=101)
         menuBar.Append(menu, "&File")
         frame.SetMenuBar(menuBar)
         win = TestPanel(frame)
         frame.CentreOnScreen()
         frame.Show(True)
         self.SetTopWindow(frame)
+
         return True
 
     def OnButton(self, evt):
         self.frame.Close(True)
 
-if __name__ == '__main__':
-  app = App(0)
-  app.MainLoop()
 
+if __name__ == '__main__':
+    app = App(0)
+    app.MainLoop()

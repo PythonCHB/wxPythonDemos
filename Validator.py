@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-import string, wx
+import string
+import wx
+
 
 class FloatValidator(wx.PyValidator):
     ''' Validates data as it is entered into the text controls. '''
@@ -46,22 +48,22 @@ class FloatValidator(wx.PyValidator):
             ctrl.BackgroundColour = None
         except ValueError:
             ctrl.BackgroundColour = "red"
-            
+
 
 class MyForm(wx.Frame):
- 
+
     #----------------------------------------------------------------------
     def __init__(self):
         wx.Frame.__init__(self, None, wx.ID_ANY, "Validator Test")
- 
+
         # Add a panel so it looks the correct on all platforms
         panel = wx.Panel(self, wx.ID_ANY)
-        
+
         self.txtEntryOne = wx.TextCtrl(panel, validator=FloatValidator())
         self.txtEntryTwo = wx.TextCtrl(panel, validator=FloatValidator())
         self.txtEntryOne.Bind(wx.EVT_TEXT, self.onTextEntry)
         self.txtEntryTwo.Bind(wx.EVT_TEXT, self.onTextEntry)
-        
+
         self.total = wx.StaticText(panel, label="Total:")
 
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -75,20 +77,21 @@ class MyForm(wx.Frame):
         """
         Add up the two text control and display the total
         """
-        
+
         valueOne = self.txtEntryOne.GetValue()
         valueTwo = self.txtEntryTwo.GetValue()
-        
+
         if valueOne == "":
             valueOne = 0
         if valueTwo == "":
             valueTwo = 0
-        
+
         try:
             total = float(valueOne) + float(valueTwo)
             self.total.SetLabel("Total: %0.4g" % total)
         except ValueError:
             self.total.SetLabel("Invalid Input")
+
 
 # Run the program
 if __name__ == "__main__":

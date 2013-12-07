@@ -1,5 +1,5 @@
 #!/usr/bin/env python
- 
+
 """
 demo of how to drive a wxPython app from another script:
 
@@ -21,11 +21,11 @@ import CalculatorDemo
 
 class GUI_Thread(threading.Thread):
     """
-    class to create a thread to run the GUI in 
-    
+    class to create a thread to run the GUI in
+
     this should allow the command line to stay active in the main thread,
     while the mainloop is running in this thread.
-    
+
     """
     def run(self):
         """
@@ -36,7 +36,7 @@ class GUI_Thread(threading.Thread):
         self.calculator = CalculatorDemo.Calculator()
         self.calculator.Show()
         self.app.MainLoop()
-        
+
 
 # create and start the thread for the GUI
 gui_thread = GUI_Thread()
@@ -49,5 +49,5 @@ while True:
     expr = raw_input()
     # send the input to the calculator to calculate
     gui_thread.calculator.ComputeExpression(expr)
-    
+
 

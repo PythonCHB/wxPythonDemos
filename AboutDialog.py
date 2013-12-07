@@ -37,11 +37,11 @@ class AboutDialog(wx.Dialog):
         self.urls = urls
         self.licence = licence
         self.developers = developers
-        
+
         self.Build()
-        
+
     def Build(self):
-        
+
         # Build the header
         Header = wx.BoxSizer(wx.HORIZONTAL)
         if self.icon1:
@@ -66,9 +66,9 @@ class AboutDialog(wx.Dialog):
 
         # Now the rest;
         MainSizer = wx.BoxSizer(wx.VERTICAL)
-        
+
         MainSizer.Add(Header, 0, wx.EXPAND|wx.ALIGN_CENTER|wx.ALL, 5)
-        
+
         if self.long_name:
             Label = wx.StaticText(self, label=self.long_name)
             of = Label.GetFont()
@@ -89,11 +89,11 @@ class AboutDialog(wx.Dialog):
             #of = Label.GetFont()
             #Font = wx.Font(int(of.GetPointSize() * 1.5), of.GetFamily(), wx.NORMAL, wx.NORMAL)
             #Label.SetFont(Font)
-            
+
             Label.Wrap(max(250, 0.9*width))
             MainSizer.Add(Label, 0, wx.ALL|wx.ALIGN_CENTER, 5)
 
-            
+
         if self.licence:
             Label = wx.StaticText(self, label="License:")
             of = Label.GetFont()
@@ -110,12 +110,12 @@ class AboutDialog(wx.Dialog):
             Font = wx.Font(of.GetPointSize(), of.GetFamily(), wx.NORMAL, wx.BOLD)
             Label.SetFont(Font)
             MainSizer.Add(Label, 0, wx.ALL|wx.ALIGN_LEFT, 5)
-           
+
             for developer in self.developers:
                 Label = wx.StaticText(self, label="          "+developer)
                 MainSizer.Add(Label, 0, wx.ALL|wx.ALIGN_LEFT, 0)
-            
-        if self.urls:            
+
+        if self.urls:
             Label = wx.StaticText(self, label="For more information:")
             of = Label.GetFont()
             Font = wx.Font(of.GetPointSize(), of.GetFamily(), wx.NORMAL, wx.BOLD)
@@ -126,13 +126,13 @@ class AboutDialog(wx.Dialog):
                                      label=url,
                                      URL=url)
                 MainSizer.Add(Link, 0, wx.ALL|wx.ALIGN_CENTER, 2)
-        
+
         MainSizer.Add((1,5),1)
         MainSizer.Add(wx.Button(self, id=wx.ID_OK, label="Dismiss"), 0, wx.ALL|wx.ALIGN_RIGHT,5)
         SpaceSizer = wx.BoxSizer(wx.VERTICAL)
         SpaceSizer.Add(MainSizer, 0, wx.ALL, 10)
         self.SetSizerAndFit(SpaceSizer)
-        
+
 if __name__ == "__main__":
 
     a = wx.App(False)
@@ -147,5 +147,5 @@ if __name__ == "__main__":
                             "mailto:someone@somwewhere.com"],
                     licence="This is a short description of the license used for the program.",
                     developers = ["A Developer", "Another Developer"])
-    
+
     d.ShowModal()

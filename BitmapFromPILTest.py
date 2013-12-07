@@ -21,7 +21,7 @@ class DemoFrame(wx.Frame):
         self.bitmap = wx.BitmapFromBuffer(w, h, image.tostring() )
 
         self.Bind(wx.EVT_PAINT, self.OnPaint)
-        
+
     def OnPaint(self, evt):
         dc = wx.PaintDC(self)
         dc.DrawBitmap(self.bitmap, 10, 10 )

@@ -3,6 +3,7 @@
 import wx
 from wx import webview
 
+
 class DemoFrame(wx.Frame):
     """ This window displays a WebKit window """
     def __init__(self, *args, **kwargs):
@@ -13,13 +14,13 @@ class DemoFrame(wx.Frame):
         #self.WKWindow = webkit.WebKitCtrl(self)
         #self.WKWindow = wx.Panel(self)
         #self.WKWindow.SetBackgroundColour("red")
-    
+
         self.Bind(webview.EVT_WEBVIEW_NEW_WINDOW, self.OnNewWindow)
         #self.Fit()
         MenuBar = wx.MenuBar()
 
         FileMenu = wx.Menu()
-        
+
         item = FileMenu.Append(wx.ID_ANY, text = "&Open")
 
         self.Bind(wx.EVT_MENU, self.OnOpen, item)
@@ -33,7 +34,7 @@ class DemoFrame(wx.Frame):
 
 
         MenuBar.Append(FileMenu, "&File")
-        
+
         HelpMenu = wx.Menu()
 
         item = HelpMenu.Append(wx.ID_HELP, "Test &Help",
@@ -54,7 +55,7 @@ class DemoFrame(wx.Frame):
         print "NewWindow"
     def OnQuit(self,Event):
         self.Destroy()
-        
+
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, "This is a small program to test\n"
                                      "the use of menus on Mac, etc.\n",
@@ -83,8 +84,10 @@ class DemoFrame(wx.Frame):
         dlg.ShowModal()
         dlg.Destroy()
 
-app = wx.App(False)
-frame = DemoFrame(None, title="WebKit test", size=(500,500))
-frame.Show()
-app.MainLoop()
+
+if __name__ == "__main__":
+    app = wx.App(False)
+    frame = DemoFrame(None, title="WebKit test", size=(500, 500))
+    frame.Show()
+    app.MainLoop()
 

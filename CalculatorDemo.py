@@ -11,7 +11,7 @@ by  Miki Tebeka
 It has been altered to allow it to be "driven" by an external script,
 plus a little layout improvement
 
-See CalcualtorDemoDriver.py 
+See CalcualtorDemoDriver.py
 
 for an example
 """
@@ -20,7 +20,7 @@ for an example
 # Calculator GUI:
 
 # ___________v
-# [7][8][9][/] 
+# [7][8][9][/]
 # [4][5][6][*]
 # [1][2][3][-]
 # [0][.][C][+]
@@ -39,7 +39,7 @@ class Calculator(wx.Frame):
         self.display = wx.ComboBox(self, -1) # Current calculation
         sizer.Add(self.display, 0, wx.EXPAND) # Add to main sizer
 
-        # [7][8][9][/] 
+        # [7][8][9][/]
         # [4][5][6][*]
         # [1][2][3][-]
         # [0][.][C][+]
@@ -67,7 +67,7 @@ class Calculator(wx.Frame):
 
     def OnButton(self, evt):
         '''Handle button click event'''
-        
+
         # Get title of clicked button
         label = evt.GetEventObject().GetLabel()
 
@@ -83,7 +83,7 @@ class Calculator(wx.Frame):
     def Calculate(self):
         """
         do the calculation itself
-        
+
         in a separate method, so it can be called outside of a button event handler
         """
         try:
@@ -107,7 +107,7 @@ class Calculator(wx.Frame):
     def ComputeExpression(self, expression):
         """
         Compute the expression passed in.
-        
+
         This can be called from another class, module, etc.
         """
         self.display.SetValue(expression)

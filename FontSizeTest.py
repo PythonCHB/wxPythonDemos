@@ -1,10 +1,12 @@
 #!/usr/bin/env python
+
 """
 Simple demo/sample for testing Font Size with a DC -- using wx.FontFromPixel Size
 
 """
 
 import wx
+
 
 class MyPanel(wx.Panel):
     def __init__(self, *args, **kwargs):
@@ -18,7 +20,7 @@ class MyPanel(wx.Panel):
 
     def Draw(self, dc):
         dc.Clear()
-        x,y = 20, 0
+        x, y = 20, 0
         for fs in [8, 10, 12, 14, 18, 20, 30, 60, 72]:
             y += 1.2 * fs
             w = fs * 11
@@ -38,6 +40,7 @@ class MyPanel(wx.Panel):
             dc.DrawRectangle(x, y, w, fs)
             dc.DrawText(text, x, y)
 
+
 class MyFrame(wx.Frame):
     def __init__(self, parent):
         wx.Frame.__init__(self, parent, title="test", size=(500, 500))
@@ -53,9 +56,9 @@ class MyFrame(wx.Frame):
         #self.Panel.DrawRect()
         pass
 
+
 if __name__ == '__main__':
     app = wx.App(0)
     frame = MyFrame(None)
     frame.Show()
     app.MainLoop()
-

@@ -2,6 +2,7 @@
 
 import wx
 
+
 class TestFrame(wx.Frame):
     def __init__(self, *args, **kwargs):
         wx.Frame.__init__(self, *args, **kwargs)
@@ -15,7 +16,7 @@ class TestFrame(wx.Frame):
         exitBut.Bind(wx.EVT_BUTTON, self.OnCloseWindow)
 
         sizer = wx.GridBagSizer(10, 10)
-        sizer.Add(t,  (0,0), span=(2,1), flag=wx.ALIGN_CENTER_VERTICAL )
+        sizer.Add(t,  (0,0), span=(2,1), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(b1, (0,1), span=(2,1), flag=wx.ALIGN_CENTER)
         sizer.Add(b2, (0,2), flag=wx.ALIGN_CENTER)
 
@@ -28,6 +29,7 @@ class TestFrame(wx.Frame):
     def OnCloseWindow(self, event):
         self.Destroy()
 
+
 class App(wx.App):
     def OnInit(self):
         frame = TestFrame(None, title="GridBagSizer Test")
@@ -35,18 +37,7 @@ class App(wx.App):
         frame.Show(True)
         return True
 
+
 if __name__ == "__main__":
     app = App(0)
     app.MainLoop()
-     
-
-
-
-
-
-
-
-
-
-
-

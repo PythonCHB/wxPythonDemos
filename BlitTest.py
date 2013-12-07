@@ -20,7 +20,7 @@ class MainWindow(wx.Frame):
         self.t=wx.Timer(self)
         self.BuildImage()
         self.t.Start(100)
-        
+
     def OnQuit(self,Event):
         self.Destroy()
 
@@ -43,10 +43,10 @@ class MainWindow(wx.Frame):
                            random.randint(1,max(Size)),
                            random.randint(1,max(Size)),
                            random.randint(1,max(Size)))
-            
+
             color = self.random_color()
             self.Lines.append( [color, (x1,y1,x2,y2)] )
-        
+
         dc.BeginDrawing()
         dc.Clear()
         for line in self.Lines:
@@ -71,7 +71,7 @@ class MainWindow(wx.Frame):
         dc.EndDrawing()
         del dc
         wx.ClientDC(self).DrawBitmap(self._Buffer,0,0)
-        
+
     def random_color(self):
         return apply(wx.Colour,(random.randrange(255),random.randrange(255),random.randrange(255)))
 
@@ -82,9 +82,9 @@ class MyApp(wx.App):
         frame = MainWindow(None, -1, "BlitTest")
         self.SetTopWindow(frame)
         frame.Show()
-        
+
         return True
-        
+
 
 app = MyApp(0)
 app.MainLoop()

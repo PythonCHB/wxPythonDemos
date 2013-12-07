@@ -1,13 +1,14 @@
-#!/usr/bin/env python2.3
+#!/usr/bin/env python
 
 import wx
 
+
 class MainWindow(wx.Frame):
     """ This window displays a button """
-    def __init__(self,parent,id,title):
+    def __init__(self, parent, id, title):
         wx.Frame.__init__(self, parent , -1, title)
 
-        self.List = map(str, range(10) ) # just to get a list of text items
+        self.List = map(str, range(10)) # just to get a list of text items
 
         #Create a box inside to contain everything except the outputbox
 
@@ -21,7 +22,7 @@ class MainWindow(wx.Frame):
         #Create a flexsizer to contain other widgets (everything except the
         #outputbox) need 2 rows and 9 columns
         # 18 widgets?, I count ten. and you had rows and columns backward.
-        flexsizer= wx.FlexGridSizer(5,2,0,0)
+        flexsizer= wx.FlexGridSizer(5, 2, 0, 0)
 
         #Create a box to which to write output
         self.outputbox = wx.TextCtrl(self, -1, "",size=wx.DefaultSize,
@@ -29,17 +30,17 @@ class MainWindow(wx.Frame):
 
 
         self.file_input = wx.RadioButton(self, 31, label='Read input from file',
-                                        pos=(-1,-1))
+                                        pos=(-1, -1))
         self.gui_input = wx.RadioButton(self, 36, label='Select command below',
-                                        pos=(1,-1))
+                                        pos=(1, -1))
 
         #wx.EVT_RADIOBUTTON(self, 31, self.SetMode)
         #wx.EVT_RADIOBUTTON(self, 36, self.SetMode)
 
         #was this ever used?
         #radiosizer = wx.BoxSizer(wx.HORIZONTAL)
-        flexsizer.Add(self.file_input,1,wx.ALL, 10)
-        flexsizer.Add(self.gui_input,1, wx.EXPAND|wx.ALL, 15)
+        flexsizer.Add(self.file_input, 1, wx.ALL, 10)
+        flexsizer.Add(self.gui_input, 1, wx.EXPAND | wx.ALL, 15)
 
         #Create combosizer which will contain the combobox and its label
         combosizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -52,8 +53,8 @@ class MainWindow(wx.Frame):
                               self.List, wx.CB_DROPDOWN)
         #wx.EVT_COMBOBOX(self, 30, self.CommandCallback)
 
-        combosizer.Add(self.combolabel, 1, wx.EXPAND|wx.ALL, 10)
-        combosizer.Add(self.combo, 2, wx.EXPAND|wx.ALL, 10)
+        combosizer.Add(self.combolabel, 1, wx.EXPAND | wx.ALL, 10)
+        combosizer.Add(self.combo, 2, wx.EXPAND | wx.ALL, 10)
         flexsizer.Add(combosizer, 2, wx.EXPAND, 10)
 
         #Create a box to accept parameters
@@ -61,54 +62,62 @@ class MainWindow(wx.Frame):
         self.parameters=wx.TextCtrl(self,-1,"", size=wx.DefaultSize)
 
         parametersizer = wx.BoxSizer(wx.HORIZONTAL)
-        parametersizer.Add(self.parameterslabel,0,wx.ALL, 10)
-        parametersizer.Add(self.parameters,1, wx.ALL, 15)
+        parametersizer.Add(self.parameterslabel, 0, wx.ALL, 10)
+        parametersizer.Add(self.parameters, 1, wx.ALL, 15)
 
         flexsizer.Add(parametersizer,1,3,wx.ALL,10)
 
         #Create button 1
-        self.buttonone = wx.Button(self, 32, label= "ONE",
-                                  style = wx.BU_BOTTOM ,size=(150,20),
-                                  name = "one")
-        #wx.EVT_BUTTON(self, 32, self.One_Func)
+        self.buttonone = wx.Button(self, 32, label="ONE", style = wx.BU_BOTTOM,
+                                   size=(150, 20), name = "one")
+        self.buttonone.Bind(wx.EVT_BUTTON, self.OnButton)
 
         #Create button 2
-        self.buttontwo = wx.Button(self, 33, label= "TWO",
-                                  style = wx.BU_BOTTOM ,size=(150,20),
-                                  name = "two")
-        #wx.EVT_BUTTON(self, 33, self.Two_Func)
+        self.buttontwo = wx.Button(self, 33, label="TWO", style=wx.BU_BOTTOM,
+                                   size=(150, 20), name="two")
+        self.buttontwo.Bind(wx.EVT_BUTTON, self.OnButton)
+
 
         #Create button 3
-        self.buttonthree = wx.Button(self, 34, label= "THREE",
-                                  style = wx.BU_BOTTOM ,size=(150,20),
-                                  name = "three")
-        #wx.EVT_BUTTON(self, 34, self.Three_Func)
+        self.buttonthree = wx.Button(self, 34, label="THREE", style=wx.BU_BOTTOM,
+                                     size=(150, 20), name="three")
+        self.buttonthree.Bind(wx.EVT_BUTTON, self.OnButton)
+
 
         #Create button 4
-        self.buttonfour = wx.Button(self, 35, label= "FOUR",
-                                  style = wx.BU_BOTTOM ,size=(150,20),
-                                  name = "four")
-        #wx.EVT_BUTTON(self, 35, self.Four_Func)
+        self.buttonfour = wx.Button(self, 35, label="FOUR", style=wx.BU_BOTTOM,
+                                    size=(150, 20), name="four")
+        self.buttonfour.Bind(wx.EVT_BUTTON, self.OnButton)
+
 
         timeoutwarning=wx.StaticText(self, -1, 'Disable Timeouts Prior to Use')
 
-        flexsizer.Add(self.buttonone,4, wx.ALL|wx.ALIGN_RIGHT, 10)
-        flexsizer.Add(self.buttontwo, 5, wx.ALL|wx.ALIGN_RIGHT, 10)
-        flexsizer.Add(self.buttonthree, 6, wx.ALL|wx.ALIGN_RIGHT, 10)
-        flexsizer.Add(self.buttonfour, 8, wx.ALL|wx.ALIGN_RIGHT, 10)
-        flexsizer.Add(timeoutwarning, 9, wx.ALL|wx.ALIGN_BOTTOM, 10)
+        flexsizer.Add(self.buttonone,4, wx.ALL | wx.ALIGN_RIGHT, 10)
+        flexsizer.Add(self.buttontwo, 5, wx.ALL | wx.ALIGN_RIGHT, 10)
+        flexsizer.Add(self.buttonthree, 6, wx.ALL | wx.ALIGN_RIGHT, 10)
+        flexsizer.Add(self.buttonfour, 8, wx.ALL | wx.ALIGN_RIGHT, 10)
+        flexsizer.Add(timeoutwarning, 9, wx.ALL | wx.ALIGN_BOTTOM, 10)
 
         #Now add the output box and the flexgridsizer to the outerboxsize
         #Create the outer sizer which is essentially the main window
         # no, it's not a Window...it does do the layout for the main window.
         # I like to build fromt eh inside out, so I put this here. It's really a matter of taste.
         outerboxsizer = wx.BoxSizer(wx.VERTICAL)
-        outerboxsizer.Add(self.outputbox, 1, wx.EXPAND|wx.ALL, 10)
+        outerboxsizer.Add(self.outputbox, 1, wx.EXPAND | wx.ALL, 10)
         outerboxsizer.Add(flexsizer)
         #Connect the outerboxsizer to the window (self)
         self.SetSizer(outerboxsizer)
         self.Fit()
-        
+
+        self.Bind(wx.EVT_CLOSE, self.OnQuit)
+
+    def OnButton(self, event):
+        print(event.GetEventObject().GetLabel())
+        evtId = event.GetId()
+        if evtId == 32: print('1')
+        elif evtId == 33: print('2')
+        elif evtId == 34: print('3')
+        elif evtId == 35: print('4')
 
     def SetMode(self):
         pass
@@ -116,21 +125,17 @@ class MainWindow(wx.Frame):
     def OnQuit(self,Event):
         self.Destroy()
 
-        
+
 class MyApp(wx.App):
     def OnInit(self):
 
         frame = MainWindow(None, -1, "Micro App")
         self.SetTopWindow(frame)
         frame.Show()
-        
+
         return True
-        
-
-app = MyApp(0)
-app.MainLoop()
 
 
-
-
-
+if __name__ == "__main__":
+    app = MyApp(0)
+    app.MainLoop()

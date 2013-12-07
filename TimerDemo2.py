@@ -1,16 +1,13 @@
-#!/usr/bin/env python2.4
-
-import wxversion
-wxversion.select("2.6")
+#!/usr/bin/env python
 
 import wx
-import  wx.stc  as  stc
+import wx.stc as stc
 import time
 
 class DemoFrame(wx.Frame):
     """ This window displays a button """
-    def __init__(self, title = "Timer Demo"):
-        wx.Frame.__init__(self, None , -1, title, size = (500,400))
+    def __init__(self, title="Timer Demo"):
+        wx.Frame.__init__(self, None , -1, title, size=(500,400))
 
         self.TextCtrl = stc.StyledTextCtrl(self, wx.NewId())
 
@@ -24,19 +21,18 @@ class DemoFrame(wx.Frame):
 
     def OnTimer(self,Event):
         CurTime = time.time() # (you might want to use time.clock on Windows)
-        NumIntervals = int( (CurTime - self.StartTime) / self.Interval )
+        NumIntervals = int((CurTime - self.StartTime) / self.Interval)
         if NumIntervals >= self.Counter:
             TimeString = time.strftime("%c", time.localtime(CurTime))
-            self.TextCtrl.AddText("Time: %s: Interval number: %i\n"%(TimeString,NumIntervals))
+            self.TextCtrl.AddText("Time: %s: Interval number: %i\n" %(TimeString,NumIntervals))
             self.Counter+= 1
 
     def OnQuit(self,Event):
         self.Destroy()
 
 
-
-app = wx.PySimpleApp(0)
-frame = DemoFrame()
-frame.Show()
-app.MainLoop()
-
+if __name__ == "__main__":
+    app = wx.App(0)
+    frame = DemoFrame()
+    frame.Show()
+    app.MainLoop()

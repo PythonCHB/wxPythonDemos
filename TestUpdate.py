@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.3
+#!/usr/bin/env python
 
 import wx
 import time
@@ -12,33 +12,32 @@ class TestFrame(wx.Frame):
 
         ## Set up the MenuBar
         MenuBar = wx.MenuBar()
-        
+
         file_menu = wx.Menu()
 
         ID_CLEAR_MENU = wx.NewId()
-        file_menu.Append(ID_CLEAR_MENU, "&Clear","Clear the Screen")
-        wx.EVT_MENU(self, ID_CLEAR_MENU, self.Clear)
+        file_menu.Append(ID_CLEAR_MENU, "&Clear", "Clear the Screen")
+        self.Bind(wx.EVT_MENU, self.Clear, id=ID_CLEAR_MENU)
 
         ID_ANIMATE_MENU = wx.NewId()
-        file_menu.Append(ID_ANIMATE_MENU, "&Animate","Animate the Screen")
-        wx.EVT_MENU(self, ID_ANIMATE_MENU, self.Animate)
+        file_menu.Append(ID_ANIMATE_MENU, "&Animate", "Animate the Screen")
+        self.Bind(wx.EVT_MENU, self.Animate, id=ID_ANIMATE_MENU)
 
-        ID_EXIT_MENU = wx.NewId()
-        file_menu.Append(ID_EXIT_MENU, "E&xit","Terminate the program")
-        wx.EVT_MENU(self, ID_EXIT_MENU, self.OnQuit)
+        file_menu.Append(wx.ID_EXIT, "E&xit", "Terminate the program")
+        self.Bind(wx.EVT_MENU, self.OnQuit, id=wx.ID_EXIT)
 
         MenuBar.Append(file_menu, "&File")
         self.SetMenuBar(MenuBar)
 
-        wx.EVT_PAINT(self, self.OnPaint)
-        wx.EVT_MOTION(self, self.OnMouseMove )
-        wx.EVT_LEFT_DOWN(self, self.OnLeftDown )
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_MOTION, self.OnMouseMove)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
 
         self.LineData = []
 
     def OnPaint(self,event):
         dc = wx.PaintDC(self)
-        dc.SetBackground( wx.Brush("Purple") )
+        dc.SetBackground(wx.Brush("Purple"))
         dc.Clear()
         dc.SetPen(wx.Pen("Red", 3))
         for Line in self.LineData:
@@ -50,7 +49,7 @@ class TestFrame(wx.Frame):
 
     def OnLeftDown(self,event):
         xy = event.GetPosition()
-        self.LineData.append( [xy] )
+        self.LineData.append([xy])
 
     def OnMouseMove(self, event):
         if event.Dragging() and event.LeftIsDown():
@@ -71,6 +70,7 @@ class TestFrame(wx.Frame):
     def OnQuit(self,event):
         self.Close(True)
 
+
 class DemoApp(wx.App):
     def OnInit(self):
         frame = TestFrame()
@@ -79,25 +79,7 @@ class DemoApp(wx.App):
 
         return True
 
+
 if __name__ == "__main__":
     app = DemoApp(0)
     app.MainLoop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
