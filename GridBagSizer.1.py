@@ -9,13 +9,12 @@ http://wiki.wxpython.org/index.cgi/WriteItYourself
 
 import wx
 
+
 class MyFrame(wx.Frame):
     def __init__(self, parent, ID, title):
-        wx.Frame.__init__(self, parent, ID, title, wx.DefaultPosition)
+        wx.Frame.__init__(self, parent, ID, title)
 
-        Buttons = []
-        for i in range(6):
-            Buttons.append(wx.Button(self,-1, "Button %i"%(i)))
+        Buttons = [wx.Button(self, -1, "Button %i"%(i)) for i in range(6)]
 
         sizer = wx.GridBagSizer(9, 9)
         sizer.Add(Buttons[0], (0, 0), wx.DefaultSpan,  wx.ALL, 5)
@@ -34,23 +33,12 @@ class MyFrame(wx.Frame):
 
 class MyApp(wx.App):
     def OnInit(self):
-        frame = MyFrame(None, -1, "wx.gridbagsizer.py")
+        frame = MyFrame(None, -1, "wx.GridBagSizer Test 1")
         frame.Show(True)
         self.SetTopWindow(frame)
         return True
 
+
 if __name__ == "__main__":
     app = MyApp(0)
     app.MainLoop()
-     
-
-
-
-
-
-
-
-
-
-
-
