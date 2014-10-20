@@ -2,6 +2,10 @@
 
 """
 test of rendering HTML to an off-screen bitmap
+
+This version uses a wx.GCDC, so you can have an alpha background.
+
+Works on OS-X, may need an explicite alpha bitmap on other platforms
 """
 
 import wx
@@ -17,7 +21,8 @@ class OffScreenHTML:
         self.HR = wx.html.HtmlDCRenderer()
         
         # a bunch of defaults...
-        self.BackgroundColor = "White"
+        self.BackgroundColor = "white"
+        self.BackgroundColor = (255, 255, 255, 50)
         self.Padding = 10
         
        
@@ -27,6 +32,7 @@ class OffScreenHTML:
         """
         DC = wx.MemoryDC()
         DC.SelectObject(self.Buffer)
+        DC = wx.GCDC(DC)
         DC.SetBackground(wx.Brush(self.BackgroundColor))
         DC.Clear()
         
@@ -78,7 +84,8 @@ if __name__ == "__main__":
     that will show if it can take care of the basic rendering for us, and
     auto-wrap, and all sorts of nifty stuff like that
     </p>
-    
+    <p>
+    and here is some <b> Bold Text </b>
     <p> It does seem to work OK </p> 
     """
     
