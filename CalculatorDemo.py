@@ -3,7 +3,7 @@
 """
 wxPython Calculator Demo in 50 lines of code
 
-This demo was pulled form teh wxPython Wiki:
+This demo was pulled from the wxPython Wiki:
 
 http://wiki.wxpython.org/CalculatorDemo
 by  Miki Tebeka
@@ -30,14 +30,15 @@ from __future__ import division # So that 8/3 will be 2.6666 and not 2
 import wx
 from math import * # So we can evaluate "sqrt(8)"
 
-class Calculator(wx.Frame):
+
+class Calculator(wx.Panel):
     '''Main calculator dialog'''
-    def __init__(self, parent=None):
-        wx.Frame.__init__(self, parent, title="Calculator")
+    def __init__(self, *args, **kwargs):
+        wx.Panel.__init__(self, *args, **kwargs)
         sizer = wx.BoxSizer(wx.VERTICAL) # Main vertical sizer
 
-        self.display = wx.ComboBox(self, -1) # Current calculation
-        sizer.Add(self.display, 0, wx.EXPAND) # Add to main sizer
+        self.display = wx.ComboBox(self) # Current calculation
+        sizer.Add(self.display, 0, wx.EXPAND|wx.BOTTOM, 8) # Add to main sizer
 
         # [7][8][9][/] 
         # [4][5][6][*]
@@ -61,9 +62,7 @@ class Calculator(wx.Frame):
         self.equal = b
 
         # Set sizer and center
-        self.SetSizer(sizer)
-        sizer.Fit(self)
-        self.CenterOnScreen()
+        self.SetSizerAndFit(sizer)
 
     def OnButton(self, evt):
         '''Handle button click event'''
@@ -78,6 +77,7 @@ class Calculator(wx.Frame):
 
         else: # Just add button text to current calculation
             self.display.SetValue(self.display.GetValue() + label)
+            self.display.SetInsertionPointEnd()
             self.equal.SetFocus() # Set the [=] button in focus
 
     def Calculate(self):
@@ -110,12 +110,28 @@ class Calculator(wx.Frame):
         
         This can be called from another class, module, etc.
         """
+        print "ComputeExpression called with:", expression
         self.display.SetValue(expression)
         self.Calculate()
+
+class MainFrame(wx.Frame):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('title', "Calculator")
+        wx.Frame.__init__(self, *args, **kwargs)
+
+        self.calcPanel = Calculator(self)
+
+        # put the panel on -- in a sizer to give it some space
+        S = wx.BoxSizer(wx.VERTICAL)
+        S.Add(self.calcPanel, 1, wx.GROW|wx.ALL, 10)
+        self.SetSizerAndFit(S)
+        self.CenterOnScreen()
+
 
 if __name__ == "__main__":
     # Run the application
     app = wx.App(False)
-    frame = Calculator(None)
+    frame = MainFrame(None)
     frame.Show()
     app.MainLoop()
+
