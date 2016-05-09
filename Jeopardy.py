@@ -34,7 +34,7 @@ class Game:
         self.questions = questions
         self.num_cat = len(catagories)
         self.num_ques = len(questions[0])
-        
+
     def all_answered(self):
         """
         returns True if all the questions are answered
@@ -55,7 +55,7 @@ class GridGeom:
         self.box_h = h / (num_questions + 1)
         self.num_cat = num_catagories
         self.num_ques = num_questions
-        
+
         self.font_size = min( int(self.box_w / 2), int(self.box_h / 2) )
 
         ##figure out the text offset
@@ -115,7 +115,7 @@ class GridWindow(wx.Window):
         # draw the background:
         dc.SetBackground(wx.Brush(self.GetBackgroundColour()))
         dc.Clear()
-        dc.SetBrush(wx.Brush(wx.Color(128,128,255)))
+        dc.SetBrush(wx.Brush(wx.Colour(128,128,255)))
         dc.SetPen(wx.TRANSPARENT_PEN)
         dc.DrawRectangle(0, 0, w * grid.num_cat, h * grid.num_ques)
 
@@ -181,8 +181,7 @@ class GridWindow(wx.Window):
         # for i in range(4):
         #     dc.DrawLine(x0, y0 + d*i, x0 + d*3, y0 + d*i)
         #     dc.DrawLine(x0 + d*i, y0, x0 + d*i, y0 + d*3)
-            
-   
+
     def OnPaint(self, event):
         dc = wx.BufferedPaintDC(self, self.buffer)
 
@@ -191,7 +190,7 @@ class GridWindow(wx.Window):
         grid = self.grid
         x, y = e.GetPositionTuple()
         i = x / grid.box_w
-        j = y / grid.box_h
+        j = y / grid.box_h - 1 # compensate for header
         if i >= 0 and i < grid.num_cat and j >= 0 and j < grid.num_ques:
             self.game.questions[i][j].answered = not self.game.questions[i][j].answered
             self.DrawNow()
@@ -401,11 +400,10 @@ class TestFrame(wx.Frame):
             
 
 if __name__ == '__main__':
-    A = wx.App()
-    F = TestFrame(None, title="test frame")
-    A.mainloop()
+    # A = wx.App()
+    # F = TestFrame(None, title="test frame")
+    # A.MainLoop()
 
-if False:
 
     catagories = [None for i in range(6)]
     questions = [ [None for i in range(5)] for j in range(6) ]
@@ -413,7 +411,7 @@ if False:
 
     catagories[0] = "Household Pets"
     questions[0][0] = Question("slobbery","what is a dog?", 100)
-    questions[0][1] = Question("cute an fuzzy","what is a cat?", 200)
+    questions[0][1] = Question("cute and fuzzy","what is a cat?", 200)
     questions[0][2] = Question("long and slithery","what is a snake?", 300)
     questions[0][3] = Question("sometimes lives in a sewer","what is a rat?", 400)
     questions[0][4] = Question("a reptile often mistaken for an amphibian","what is a turtle?", 500)
