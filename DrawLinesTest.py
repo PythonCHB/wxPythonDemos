@@ -1,20 +1,21 @@
-#!/usr/bin/env python2.4
+#!/usr/bin/env pythonw
 
 import wx
-import numarray
-from numarray import random_array
-import RandomArray # the Numeric version
+print wx.__version__
+import numpy as np
+from numpy import random
 import time
 
 
-NumLinePoints = 5000
-NumPointPoints = 5000
+NumLinePoints = 1000
+NumPointPoints = 1000
 
 ## Make some random data to draw things with.
 MaxX  = 500
-LinesPoints = random_array.randint(1, MaxX, (NumLinePoints,2) )
+# LinesPoints = random.randint(1, MaxX, (NumLinePoints,2) )
+LinesPoints = random.randint(1, MaxX, (NumLinePoints,2) )
 #PointsPoints = random_array.randint(1, MaxX, (NumPointPoints,2) )
-PointsPoints = RandomArray.randint(1, MaxX, (NumPointPoints,2) ) # Numeric
+PointsPoints = random.randint(1, MaxX, (NumPointPoints,2) ) # Numeric
 
 
 
@@ -22,9 +23,8 @@ class TestFrame(wx.Frame):
     def __init__(self):
         wx.Frame.__init__(self, None, -1, "DrawLines Test",
                          wx.DefaultPosition,
-                         size=(500,500),
+                         size=(MaxX, MaxX),
                          style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
-
         ## Set up the MenuBar
         MenuBar = wx.MenuBar()
         
@@ -42,9 +42,10 @@ class TestFrame(wx.Frame):
 
         self.SetMenuBar(MenuBar)
 
-        wx.EVT_PAINT(self, self.OnPaint)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
 
     def OnPaint(self,event):
+        print "in OnPaint..."
         dc = wx.PaintDC(self)
         dc.SetBackground( wx.Brush("White") )
         dc.Clear()
@@ -62,9 +63,16 @@ class TestFrame(wx.Frame):
         dc.BeginDrawing()
         dc.SetPen(wx.Pen('Black', 2))
         start = time.clock()
-        #dc.DrawLines(LinesPoints.tolist())
         dc.DrawLines(LinesPoints)
         print "DrawLines Call took %f seconds"%(time.clock() - start)
+        start = time.clock()
+        for i in range(len(LinesPoints)-1):
+            dc.DrawLine(LinesPoints[i,0],
+                        LinesPoints[i,1],
+                        LinesPoints[i+1,0],
+                        LinesPoints[i+1,1],
+                )
+        print "DrawLine loop took %f seconds"%(time.clock() - start)
         dc.EndDrawing()
 
     def DrawPoints(self, dc):
@@ -87,7 +95,7 @@ class DemoApp(wx.App):
         return True
 
 if __name__ == "__main__":
-    app = DemoApp(0)
+    app = DemoApp(False)
     app.MainLoop()
 
 
