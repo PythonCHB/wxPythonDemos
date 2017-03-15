@@ -1,5 +1,11 @@
 #!/usr/bin/env
 
+"""
+Putting an image in a Scrolled Window
+
+And drawing something over it.
+"""
+
 import wx
 
 # set an image file here
