@@ -11,8 +11,8 @@ class DemoFrame(wx.Frame):
 
         FileMenu = wx.Menu()
         
-        item = wx.MenuItem(FileMenu, wx.ID_ANY, "&Quit")
-        FileMenu.AppendItem(item)
+        item = wx.MenuItem(FileMenu, wx.ID_EXIT, "&Quit")
+        FileMenu.Append(item)
         self.Bind(wx.EVT_MENU, self.OnQuit, item)
 
         MenuBar.Append(FileMenu, "&File")
@@ -20,24 +20,22 @@ class DemoFrame(wx.Frame):
 
 
         RB = wx.RadioBox(self,
-                         -1,
-                         "Hedges",
-                         wx.DefaultPosition,
-                         wx.DefaultSize,
-                         ["ABOUT", "AROUND", "ABOVE", "POSITIVE", "BELOW",
-                          "VICINITY", "GENERALLY", "CLOSE", "NOT", "SOMEWHAT", "VERY", "EXTREMELY",
-                          "SLIGHTLY", "AFTER", "BEFORE"],
-                         2,
-                         wx.RA_SPECIFY_COLS) 
+                         label="Hedges",
+                         choices = ["ABOUT", "AROUND", "ABOVE", "POSITIVE",
+                                    "BELOW", "VICINITY", "GENERALLY", "CLOSE",
+                                    "NOT", "SOMEWHAT", "VERY", "EXTREMELY",
+                                    "SLIGHTLY", "AFTER", "BEFORE"],
+                         majorDimension=2,
+                         style=wx.RA_SPECIFY_COLS) 
 
-        wx.EVT_CLOSE(self,self.OnQuit)
+        self.Bind(wx.EVT_CLOSE, self.OnQuit)
 
         self.Fit()
         
     def OnQuit(self,Event):
         self.Destroy()
 
-app = wx.PySimpleApp(0)
+app = wx.App(False)
 frame = DemoFrame()
 frame.Show()
 app.MainLoop()

@@ -7,14 +7,16 @@ Modeled after the Game show Jeopardy! (tm), this program
 lets you run a simple game yourself, with questions and
 answers provided by you.
 
+NOTE: very much a work in progress!
+
 This code is in the public domain
 
   -Chris.Barker@noaa.gov
 
 """
 
-
 import wx
+
 
 class Question(object):
     """
@@ -182,7 +184,6 @@ class GridWindow(wx.Window):
         #     dc.DrawLine(x0, y0 + d*i, x0 + d*3, y0 + d*i)
         #     dc.DrawLine(x0 + d*i, y0, x0 + d*i, y0 + d*3)
 
-
     def OnPaint(self, event):
         dc = wx.BufferedPaintDC(self, self.buffer)
 
@@ -191,7 +192,7 @@ class GridWindow(wx.Window):
         grid = self.grid
         x, y = e.GetPositionTuple()
         i = x / grid.box_w
-        j = y / grid.box_h
+        j = y / grid.box_h - 1  # compensate for header
         if i >= 0 and i < grid.num_cat and j >= 0 and j < grid.num_ques:
             self.game.questions[i][j].answered = not self.game.questions[i][j].answered
             self.DrawNow()
@@ -378,91 +379,68 @@ class Header(object):
 #        self.BoxHeight = BoxHeight
 #        self.CalcBoundingBox()
 
+    # def draw(self, DC):
+    #     for word in question:
+    #         pass
 
-    def draw(self, DC):
-        for word in question:
-            pass
-
-
-# class TestFrame(wx.Frame):
-#     def __init__(self, *args, **kwargs):
-#         wx.Frame.__init__(self, *args, **kwargs)
-
-#         self.Bind(wx.EVT_PAINT, self.OnPaint)
-#         #self.header = Header("This is a pretty long question that will need to wrap")
-
-#         #header.wrap_to_width
-#         #print header.question_lines
-
-#     def OnPaint(self, evt):
-#         dc = wx.PaintDC(self)
-#         #if self.header is not None:
-#         #    self.header.draw(dc)
-
-
-# if __name__ == '__main__':
-#     A = wx.App()
-#     F = TestFrame(None, title="test frame")
-#     F.Show()
-#     A.MainLoop()
 
 if __name__ == '__main__':
 
     catagories = [None for i in range(6)]
-    questions = [ [None for i in range(5)] for j in range(6) ]
-    ## test data:
+    questions = [[None for i in range(5)] for j in range(6)]
+
+    # test data:
 
     catagories[0] = "Household Pets"
-    questions[0][0] = Question("slobbery","what is a dog?", 100)
-    questions[0][1] = Question("cute an fuzzy","what is a cat?", 200)
-    questions[0][2] = Question("long and slithery","what is a snake?", 300)
-    questions[0][3] = Question("sometimes lives in a sewer","what is a rat?", 400)
-    questions[0][4] = Question("a reptile often mistaken for an amphibian","what is a turtle?", 500)
+    questions[0][0] = Question("slobbery", "what is a dog?", 100)
+    questions[0][1] = Question("cute and fuzzy", "what is a cat?", 200)
+    questions[0][2] = Question("long and slithery", "what is a snake?", 300)
+    questions[0][3] = Question("sometimes lives in a sewer", "what is a rat?", 400)
+    questions[0][4] = Question("a reptile often mistaken for an amphibian",
+                               "what is a turtle?", 500)
 
-    ## test data:
     catagories[1] = "Household Pets"
-    questions[1][0] = Question("slobbery","what is a dog?", 100)
-    questions[1][1] = Question("cute an fuzzy","what is a cat?", 200)
-    questions[1][2] = Question("long and slithery","what is a snake?", 300)
-    questions[1][3] = Question("sometimes lives in a sewer","what is a rat?", 400)
-    questions[1][4] = Question("a reptile often mistaken for an amphibian","what is a turtle?", 500)
+    questions[1][0] = Question("slobbery", "what is a dog?", 100)
+    questions[1][1] = Question("cute an fuzzy", "what is a cat?", 200)
+    questions[1][2] = Question("long and slithery", "what is a snake?", 300)
+    questions[1][3] = Question("sometimes lives in a sewer", "what is a rat?", 400)
+    questions[1][4] = Question("a reptile often mistaken for an amphibian",
+                               "what is a turtle?", 500)
 
-    ## test data:
     catagories[2] = "Household Pets"
-    questions[2][0] = Question("slobbery","what is a dog?", 100)
-    questions[2][1] = Question("cute an fuzzy","what is a cat?", 200)
-    questions[2][2] = Question("long and slithery","what is a snake?", 300)
-    questions[2][3] = Question("sometimes lives in a sewer","what is a rat?", 400)
-    questions[2][4] = Question("a reptile often mistaken for an amphibian","what is a turtle?", 500)
+    questions[2][0] = Question("slobbery", "what is a dog?", 100)
+    questions[2][1] = Question("cute an fuzzy", "what is a cat?", 200)
+    questions[2][2] = Question("long and slithery", "what is a snake?", 300)
+    questions[2][3] = Question("sometimes lives in a sewer", "what is a rat?", 400)
+    questions[2][4] = Question("a reptile often mistaken for an amphibian",
+                               "what is a turtle?", 500)
 
-    ## test data:
     catagories[3] = "Household Pets"
-    questions[3][0] = Question("slobbery","what is a dog?", 100)
-    questions[3][1] = Question("cute an fuzzy","what is a cat?", 200)
-    questions[3][2] = Question("long and slithery","what is a snake?", 300)
-    questions[3][3] = Question("sometimes lives in a sewer","what is a rat?", 400)
-    questions[3][4] = Question("a reptile often mistaken for an amphibian","what is a turtle?", 500)
-    ## test data:
+    questions[3][0] = Question("slobbery", "what is a dog?", 100)
+    questions[3][1] = Question("cute an fuzzy", "what is a cat?", 200)
+    questions[3][2] = Question("long and slithery", "what is a snake?", 300)
+    questions[3][3] = Question("sometimes lives in a sewer", "what is a rat?", 400)
+    questions[3][4] = Question("a reptile often mistaken for an amphibian",
+                               "what is a turtle?", 500)
     catagories[4] = "Household Pets"
-    questions[4][0] = Question("slobbery","what is a dog?", 100)
-    questions[4][1] = Question("cute an fuzzy","what is a cat?", 200)
-    questions[4][2] = Question("long and slithery","what is a snake?", 300)
-    questions[4][3] = Question("sometimes lives in a sewer","what is a rat?", 400)
-    questions[4][4] = Question("a reptile often mistaken for an amphibian","what is a turtle?", 500)
+    questions[4][0] = Question("slobbery", "what is a dog?", 100)
+    questions[4][1] = Question("cute an fuzzy", "what is a cat?", 200)
+    questions[4][2] = Question("long and slithery", "what is a snake?", 300)
+    questions[4][3] = Question("sometimes lives in a sewer", "what is a rat?", 400)
+    questions[4][4] = Question("a reptile often mistaken for an amphibian",
+                               "what is a turtle?", 500)
 
-    ## test data:
     catagories[5] = "Household Pets"
-    questions[5][0] = Question("slobbery","what is a dog?", 100)
-    questions[5][1] = Question("cute an fuzzy","what is a cat?", 200)
-    questions[5][2] = Question("long and slithery","what is a snake?", 300)
-    questions[5][3] = Question("sometimes lives in a sewer","what is a rat?", 400)
-    questions[5][4] = Question("a reptile often mistaken for an amphibian","what is a turtle?", 500)
+    questions[5][0] = Question("slobbery", "what is a dog?", 100)
+    questions[5][1] = Question("cute an fuzzy", "what is a cat?", 200)
+    questions[5][2] = Question("long and slithery", "what is a snake?", 300)
+    questions[5][3] = Question("sometimes lives in a sewer", "what is a rat?", 400)
+    questions[5][4] = Question("a reptile often mistaken for an amphibian",
+                               "what is a turtle?", 500)
 
-
-    #set a few as answered
+    # set a few as answered
     questions[3][3].answered = True
     questions[2][4].answered = True
-
 
     app = wx.App(0)
     game = Game(catagories, questions)
