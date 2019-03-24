@@ -1,29 +1,30 @@
-#!/usr/bin/env python2.3
+#!/usr/bin/env python
 
 
-import  wx, random
+import wx
+import random
 
 
 #---------------------------------------------------------------------------
 
 class BufferedScrolledWindow(wx.ScrolledWindow):
-    def __init__(self, parent, id = -1, size = wx.DefaultSize):
+    def __init__(self, parent, id=-1, size=wx.DefaultSize):
         wx.ScrolledWindow.__init__(self, parent, id, (0, 0), size=size, style=wx.SUNKEN_BORDER)
 
         self.thumb = 10
-        
+
         Width, Height = parent.GetClientSizeTuple()
         self.maxWidth  = Width * 2
         self.maxHeight = Height * 2
 
 #        self.SetBackgroundColour("WHITE")
 
-        self.SetScrollbars(self.thumb, self.thumb, self.maxWidth/self.thumb, self.maxHeight/self.thumb)
-
+        self.SetScrollbars(self.thumb, self.thumb,
+                           self.maxWidth / self.thumb, self.maxHeight / self.thumb)
 
         self.buffer = wx.EmptyBitmap(self.maxWidth, self.maxHeight)
 
-        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftButtonEvent)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftButtonevent)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
 
     def getWidth(self):
@@ -39,7 +40,7 @@ class BufferedScrolledWindow(wx.ScrolledWindow):
         # here that's all there is to it.
         dc = wx.BufferedPaintDC(self, self.buffer)
 
-    def Draw(self,dc):
+    def Draw(self, dc):
         pass
 
     def UpdateDrawing(self):
@@ -55,17 +56,17 @@ class BufferedScrolledWindow(wx.ScrolledWindow):
         dc = wx.BufferedDC(wx.ClientDC(self), self.buffer)
         self.Draw(dc)
 
-    def OnLeftButtonEvent(self, Event):
-        print "in LeftDown"
-        x, y = Event.GetPosition()
-        print "(x,y) is:)", (x, y)
-        print "Virtual XY is:", self.CalcUnscrolledPosition(x,y)
-        print "Virtual Size of Window is:", self.GetVirtualSize()
+    def OnLeftButtonevent(self, event):
+        print("in LeftDown")
+        x, y = event.GetPosition()
+        print("(x,y) is:)", (x, y))
+        print("Virtual XY is:", self.CalcUnscrolledPosition(x,y))
+        print("Virtual Size of Window is:", self.GetVirtualSize())
 
     def SetXY(self, event):
-        self.x, self.y = self.ConvertEventCoords(event)
+        self.x, self.y = self.ConverteventCoords(event)
 
-    def ConvertEventCoords(self, event):
+    def ConverteventCoords(self, event):
         xView, yView = self.GetViewStart()
         xDelta, yDelta = self.GetScrollPixelsPerUnit()
         return (event.GetX() + (xView * xDelta),
@@ -117,10 +118,10 @@ class BufferedScrolledWindow(wx.ScrolledWindow):
 ##        self.thumb = 10
 
 ##        Width, Height = parent.GetClientSizeTuple()
-        
+
 ##        noUnitsX = Width * 2 / self.thumb
 ##        noUnitsY = Height * 2 / self.thumb
-        
+
 ##        #self.SetScrollRate(self.thumb, self.thumb)
 ##        #self.SetVirtualSize( (self.thumb * noUnitsX, self.thumb * noUnitsY) )
 
@@ -131,7 +132,7 @@ class BufferedScrolledWindow(wx.ScrolledWindow):
 ##        # create a Buffer the vitual size
 ##        print "Virtual Size is:", self.GetVirtualSize()
 ##        self._Buffer = wxEmptyBitmap(Width/4, Height/4)
-    
+
 ##        wx.EVT_PAINT(self, self.OnPaint)
 ##        wx.EVT_SIZE(self, self.OnSize)
 
@@ -143,9 +144,9 @@ class BufferedScrolledWindow(wx.ScrolledWindow):
 ##        # platforms at initialization, but little harm done.
 ##        #self.OnSize(None)
 
-##    def LeftDown(self, Event):
+##    def LeftDown(self, event):
 ##        print "in LeftDown"
-##        x, y = Event.GetPosition()
+##        x, y = event.GetPosition()
 ##        print "(x,y) is:)", (x, y)
 ##        print "Virtual XY is:", self.CalcUnscrolledPosition(x,y)
 ##        print "Virtual Size of Window is:", self.GetVirtualSize()
@@ -171,8 +172,8 @@ class BufferedScrolledWindow(wx.ScrolledWindow):
 ##        print "Virtual Size is:", self.GetVirtualSize()
 ##        pass
 ##        # perhaps something needs to be done to make sure theuser doesn't make the window bigger than the viftual size.
-        
-        
+
+
 ##        # The Buffer init is done here, to make sure the buffer is always
 ##        # the same size as the Window
 ##        #self.Width, self.Height = self.GetClientSizeTuple()
@@ -218,7 +219,7 @@ class BufferedScrolledWindow(wx.ScrolledWindow):
 ##            dc = wxClientDC(self)
 ##            self.PrepareDC(dc)
 ##            dc.DrawBitmap(self._Buffer, 0, 0)
-            
+
 ##            #dc.Blit(0, 0, self.Width, self.Height, dc, 0, 0)
 
 class DrawWindow(BufferedScrolledWindow):
@@ -231,9 +232,9 @@ class DrawWindow(BufferedScrolledWindow):
         BufferedScrolledWindow.__init__(self, parent, id)
 
     def Draw(self, dc):
-        print "In Draw"
-        print "DC size is:", dc.GetSize()
-          
+        print("In Draw")
+        print("DC size is:", dc.GetSize())
+
         dc.BeginDrawing()
         dc.SetBackground( wx.Brush("White") )
         dc.Clear() # make sure you clear the bitmap!
@@ -274,20 +275,20 @@ class TestFrame(wx.Frame):
         file_menu = wx.Menu()
         ID_EXIT_MENU = wx.NewId()
         file_menu.Append(ID_EXIT_MENU, "E&xit","Terminate the program")
-        wx.EVT_MENU(self, ID_EXIT_MENU, self.OnQuit)
+        self.Bind(wx.EVT_MENU, self.OnQuit, id=ID_EXIT_MENU)
         MenuBar.Append(file_menu, "&File")
 
         draw_menu = wx.Menu()
         ID_DRAW_MENU = wx.NewId()
         draw_menu.Append(ID_DRAW_MENU, "&New Drawing","Update the Drawing Data")
-        wx.EVT_MENU(self, ID_DRAW_MENU,self.NewDrawing)
+        self.Bind(wx.EVT_MENU, self.NewDrawing, id=ID_DRAW_MENU)
+
         BMP_ID = wx.NewId()
         draw_menu.Append(BMP_ID,'&Save Drawing\tAlt-I','')
-        wx.EVT_MENU(self,BMP_ID, self.SaveToFile)
+        self.Bind(wx.EVT_MENU, self.SaveToFile, id=BMP_ID)
         MenuBar.Append(draw_menu, "&Draw")
 
         self.SetMenuBar(MenuBar)
-
 
         self.Window = DrawWindow(self)
 
@@ -303,16 +304,16 @@ class TestFrame(wx.Frame):
                            defaultDir = "",
                            defaultFile = "",
                            wildcard = "*.png",
-                           style = wx.SAVE)
+                           style = wx.FD_SAVE)
         if dlg.ShowModal() == wx.ID_OK:
-            self.Window.SaveToFile(dlg.GetPath(),wx.BITMAP_TYPE_PNG)
+            self.Window.SaveToFile(dlg.GetPath(), wx.BITMAP_TYPE_PNG)
         dlg.Destroy()
 
     def MakeNewData(self):
         ## This method makes some random data to draw things with.
         MaxX, MaxY = self.Window.GetVirtualSize()
 
-        print "in MakeNewData", MaxX, MaxY
+        print("in MakeNewData", MaxX, MaxY)
         DrawData = {}
 
         # make some random rectangles
@@ -347,9 +348,9 @@ class TestFrame(wx.Frame):
 
         return DrawData
 
+
 class DemoApp(wx.App):
     def OnInit(self):
-        wx.InitAllImageHandlers() # called so a PNG can be saved
         frame = TestFrame()
         frame.Show(True)
 
@@ -363,21 +364,7 @@ class DemoApp(wx.App):
 
         return True
 
+
 if __name__ == "__main__":
     app = DemoApp(0)
     app.MainLoop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,16 +1,16 @@
 #!/usr/bin/env python
-
 """
-A test of temporatry drawing using a method called from OnPaint
+A test of temporary drawing using a method called from OnPaint
+
+NOTE: this is broken -- needs debugging!
 
 """
 
 import wx
-print(wx.__version__)
+import random
 
 
 class BufferedWindow(wx.Window):
-
     """
 
     A Buffered window class.
@@ -27,14 +27,16 @@ class BufferedWindow(wx.Window):
 
     """
 
-    def __init__(self, parent, id,
+    def __init__(self,
+                 parent,
+                 id,
                  pos=wx.DefaultPosition,
                  size=wx.DefaultSize,
                  style=wx.NO_FULL_REPAINT_ON_RESIZE):
         wx.Window.__init__(self, parent, id, pos, size, style)
 
-        wx.EVT_PAINT(self, self.OnPaint)
-        wx.EVT_SIZE(self, self.OnSize)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
 
         # OnSize called to make sure the buffer is initialized.
         # This might result in OnSize getting called twice on some
@@ -94,13 +96,11 @@ class BufferedWindow(wx.Window):
 
 
 class DrawWindow(BufferedWindow):
-
-    def __init__(self, parent, id = -1):
+    def __init__(self, parent, id=-1):
         # Any data the Draw() function needs must be initialized before
         # calling BufferedWindow.__init__, as it will call the Draw
         # function.
         BufferedWindow.__init__(self, parent, id)
-
 
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
@@ -128,9 +128,8 @@ class DrawWindow(BufferedWindow):
         self.overlay.Reset()
 
     def OnMove(self, event):
-        if (event.Dragging() and
-             event.LeftIsDown() and
-             self.StartMove is not None):
+        if (event.Dragging() and event.LeftIsDown()
+                and self.StartMove is not None):
             pos = event.GetPosition()
             # self.Refresh()
             dc = wx.ClientDC(self)
@@ -171,25 +170,7 @@ class DemoApp(wx.App):
 
         return True
 
+
 if __name__ == "__main__":
     app = DemoApp(0)
     app.MainLoop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

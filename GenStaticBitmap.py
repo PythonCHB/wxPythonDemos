@@ -3,6 +3,7 @@ import wx
 
 import wx.lib.statbmp
 
+
 class cWindowBitmap(wx.lib.statbmp.GenStaticBitmap):
 
     """
@@ -17,15 +18,15 @@ class cWindowBitmap(wx.lib.statbmp.GenStaticBitmap):
         self.filename = bitmapfilename
         self.ImageNumber = ImageNumber
 
-        self.Bind(wx.EVT_LEFT_DOWN,self.OnLeftDown)
-        self.Bind(wx.EVT_LEFT_UP,self.OnLeftUp)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
+        self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
 
     def OnLeftDown(self, event):
-        print "In Left Down of:", self.filename
+        print("In Left Down of:", self.filename)
         self.parent.OnBitmapClicked(self.ImageNumber)
 
     def OnLeftUp(self, event):
-        print "In Left Up of:", self.filename
+        print("In Left Up of:", self.filename)
 
 
 class MainFrame(wx.Frame):
@@ -33,28 +34,29 @@ class MainFrame(wx.Frame):
         wx.Frame.__init__(self, *args, **kwargs)
 
         Sizer = wx.BoxSizer(wx.VERTICAL)
-        #These represent "many" bitmaps.
-        for i in range(3):
-            pic = cWindowBitmap(self, "Images/smalltest.jpg", i)
-            Sizer.Add(pic, 0, wx.ALL, 10)
+        # These represent "many" bitmaps.
+        [Sizer.Add(cWindowBitmap(self, "Images/smalltest.jpg", i), 0, wx.ALL, 10)
+            for i in range(3)]
 
         self.SetSizerAndFit(Sizer)
 
-        wx.EVT_CLOSE(self, self.OnCloseWindow)
-    
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
     def OnBitmapClicked(self, ImageNumber):
-        print "Image: %i was clicked"%ImageNumber
-        
+        print("Image: %i was clicked" %ImageNumber)
+
     def OnCloseWindow(self, event):
         self.Destroy()
 
+
 class App(wx.App):
     def OnInit(self):
-        frame = MainFrame(None, -1, "wxWindowBitmap Test", wx.DefaultPosition,(550,600))
+        frame = MainFrame(None, -1, "wxWindowBitmap Test", wx.DefaultPosition, (550, 600))
         self.SetTopWindow(frame)
         frame.Show(True)
         return True
 
-app = App(0)
-app.MainLoop()
 
+if __name__ == '__main__':
+    app = App(0)
+    app.MainLoop()

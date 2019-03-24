@@ -1,20 +1,20 @@
-#!/usr/bin/env python2.3
+#!/usr/bin/env python
 
-from wxPython.wx import *
-from   wxPython.html       import *
+import wx
+import wx.html
 
 #-------------------------------------------------------------------
 
-class MyPanel(wxPanel):   
+class MyPanel(wx.Panel):
 
     def __init__(self, parent, id):
-        wxPanel.__init__(self, parent, id, wxDefaultPosition, wxDefaultSize)
+        wx.Panel.__init__(self, parent, id, wx.DefaultPosition, wx.DefaultSize)
 
-        sty = wxTE_MULTILINE | wxTE_RICH2 | wxTE_DONTWRAP | wxHSCROLL
-        self.tc = wxTextCtrl(self, -1, '', (8, 8), wxSize(300, 200), sty)
-        attrib1 = wxTextAttr('RED', 'WHITE', wxFont(12, wxMODERN, wxNORMAL, wxNORMAL))
-        attrib2 = wxTextAttr('BLACK', 'WHITE', wxFont(12, wxROMAN, wxNORMAL, wxNORMAL))
-        attrib3 = wxTextAttr('BLACK', 'WHITE', wxFont(12, wxSWISS, wxNORMAL, wxBOLD))
+        sty = wx.TE_MULTILINE | wx.TE_RICH2 | wx.TE_DONTWRAP | wx.HSCROLL
+        self.tc = wx.TextCtrl(self, -1, '', (8, 8), wx.Size(300, 200), sty)
+        attrib1 = wx.TextAttr('RED', 'WHITE',   wx.Font(12, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
+        attrib2 = wx.TextAttr('BLACK', 'WHITE', wx.Font(12, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL))
+        attrib3 = wx.TextAttr('BLACK', 'WHITE', wx.Font(12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD))
         self.tc.SetDefaultStyle(attrib1)
         self.tc.AppendText("This is a line of text\n")
         self.tc.AppendText("This is another line of text\n")
@@ -23,7 +23,7 @@ class MyPanel(wxPanel):
         self.tc.SetDefaultStyle(attrib3)
         self.tc.AppendText("This is a fourth line of text\n")
 
-        self.Html = wxHtmlWindow(self, -1 , (8, 220), wxSize(300, 200),wxNO_FULL_REPAINT_ON_RESIZE )
+        self.Html = wx.html.HtmlWindow(self, -1 , (8, 220), wx.Size(300, 200), wx.NO_FULL_REPAINT_ON_RESIZE )
         text = """
         <html><body><tt>
         <pre>
@@ -37,21 +37,19 @@ This is a fourth line of text<br>
         </tt>
         </body></html>"""
         self.Html.SetPage(text)
-        
-#-------------------------------------------------------------------
 
-class MyFrame(wxFrame):
+
+class MyFrame(wx.Frame):
 
     def __init__(self, parent, id):
         title = 'atextctrl'
-        style = wxSYSTEM_MENU | wxCAPTION | wxMINIMIZE_BOX
-        wxFrame.__init__(self, parent, id, title, wxPoint(0, 0),
-                            wxSize(350, 500), style)
+        style = wx.DEFAULT_FRAME_STYLE | wx.SYSTEM_MENU | wx.CAPTION | wx.MINIMIZE_BOX
+        wx.Frame.__init__(self, parent, id, title, wx.Point(0, 0),
+                            wx.Size(350, 500), style)
         self.panel = MyPanel(self, -1)
 
-#-------------------------------------------------------------------
 
-class MyApp(wxApp):
+class MyApp(wx.App):
 
     def OnInit(self):
         frame = MyFrame(None, -1)
@@ -59,15 +57,11 @@ class MyApp(wxApp):
         self.SetTopWindow(frame)
         return True
 
-#-------------------------------------------------------------------
 
 def main():
     app = MyApp(0)
     app.MainLoop()
 
-#-------------------------------------------------------------------
 
 if __name__ == "__main__" :
     main()
-
-#eof-------------------------------------------------------------------

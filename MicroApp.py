@@ -2,6 +2,7 @@
 
 import wx
 
+
 class DemoFrame(wx.Frame):
     """ This window displays a button """
     def __init__(self, title = "Micro App"):
@@ -10,7 +11,7 @@ class DemoFrame(wx.Frame):
         MenuBar = wx.MenuBar()
 
         FileMenu = wx.Menu()
-        
+
         item = FileMenu.Append(wx.ID_ANY, text = "&Open")
 
         self.Bind(wx.EVT_MENU, self.OnOpen, item)
@@ -24,7 +25,7 @@ class DemoFrame(wx.Frame):
 
 
         MenuBar.Append(FileMenu, "&File")
-        
+
         HelpMenu = wx.Menu()
 
         item = HelpMenu.Append(wx.ID_HELP, "Test &Help",
@@ -45,10 +46,10 @@ class DemoFrame(wx.Frame):
 
         self.Bind(wx.EVT_CLOSE, self.OnQuit)
 
-        
+
     def OnQuit(self,Event):
         self.Destroy()
-        
+
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, "This is a small program to test\n"
                                      "the use of menus on Mac, etc.\n",
@@ -77,12 +78,9 @@ class DemoFrame(wx.Frame):
         dlg.ShowModal()
         dlg.Destroy()
 
-app = wx.App(False)
-frame = DemoFrame()
-frame.Show()
-app.MainLoop()
 
-
-
-
-
+if __name__ == "__main__":
+    app = wx.App(False)
+    frame = DemoFrame()
+    frame.Show()
+    app.MainLoop()

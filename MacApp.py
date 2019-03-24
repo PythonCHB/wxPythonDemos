@@ -12,26 +12,27 @@ just fine on other platforms as well : that's the beauty of wx!
 
 import wx
 
+
 class DemoFrame(wx.Frame):
     """ This window displays a button """
-    def __init__(self, title = "Micro App"):
+    def __init__(self, title="Micro App"):
         wx.Frame.__init__(self, None , -1, title)
 
         MenuBar = wx.MenuBar()
 
         FileMenu = wx.Menu()
-        
-        item = FileMenu.Append(wx.ID_EXIT, text = "&Exit")
+
+        item = FileMenu.Append(wx.ID_EXIT, text="&Exit")
         self.Bind(wx.EVT_MENU, self.OnQuit, item)
 
-        item = FileMenu.Append(wx.ID_ANY, text = "&Open")
+        item = FileMenu.Append(wx.ID_ANY, text="&Open")
         self.Bind(wx.EVT_MENU, self.OnOpen, item)
 
-        item = FileMenu.Append(wx.ID_PREFERENCES, text = "&Preferences")
+        item = FileMenu.Append(wx.ID_PREFERENCES, text="&Preferences")
         self.Bind(wx.EVT_MENU, self.OnPrefs, item)
 
         MenuBar.Append(FileMenu, "&File")
-        
+
         HelpMenu = wx.Menu()
 
         item = HelpMenu.Append(wx.ID_HELP, "Test &Help",
@@ -46,22 +47,22 @@ class DemoFrame(wx.Frame):
 
         self.SetMenuBar(MenuBar)
 
-        btn = wx.Button(self, label = "Quit")
+        btn = wx.Button(self, label="Quit")
 
         btn.Bind(wx.EVT_BUTTON, self.OnQuit )
 
         self.Bind(wx.EVT_CLOSE, self.OnQuit)
 
         s = wx.BoxSizer(wx.VERTICAL)
-        s.Add((200,50))
+        s.Add((200, 50))
         s.Add(btn, 0, wx.CENTER, wx.ALL, 20)
-        s.Add((200,50))
+        s.Add((200, 50))
 
         self.SetSizerAndFit(s)
-        
+
     def OnQuit(self,Event):
         self.Destroy()
-        
+
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, "This is a small program to test\n"
                                      "the use of menus on Mac, etc.\n",
@@ -89,11 +90,12 @@ class DemoFrame(wx.Frame):
                                 "Preferences", wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
-        
+
+
 class MyApp(wx.App):
     def __init__(self, *args, **kwargs):
         wx.App.__init__(self, *args, **kwargs)
-        
+
         # This catches events when the app is asked to activate by some other
         # process
         self.Bind(wx.EVT_ACTIVATE_APP, self.OnActivate)
@@ -114,43 +116,38 @@ class MyApp(wx.App):
             self.GetTopWindow().Raise()
         except:
             pass
-        
+
     def OnActivate(self, event):
         # if this is an activate event, rather than something else, like iconize.
         if event.GetActive():
             self.BringWindowToFront()
         event.Skip()
-    
+
     def OpenFileMessage(self, filename):
         dlg = wx.MessageDialog(None,
                                "This app was just asked to open:\n%s\n"%filename,
                                "File Dropped",
-                               wx.OK|wx.ICON_INFORMATION)
+                               wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
 
     def MacOpenFile(self, filename):
         """Called for files droped on dock icon, or opened via finders context menu"""
-        print filename
-        print "%s dropped on app"%(filename) #code to load filename goes here.
+        print(filename)
+        print("%s dropped on app" %(filename)) #code to load filename goes here.
         self.OpenFileMessage(filename)
-        
+
     def MacReopenApp(self):
         """Called when the doc icon is clicked, and ???"""
         self.BringWindowToFront()
 
     def MacNewFile(self):
         pass
-    
+
     def MacPrintFile(self, file_path):
         pass
- 
 
 
-app = MyApp(False)
-app.MainLoop()
-
-
-
-
-
+if __name__ == "__main__":
+    app = MyApp(False)
+    app.MainLoop()

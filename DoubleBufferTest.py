@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.4
+#!/usr/bin/env python
 
 import wx
 import random
@@ -8,6 +8,7 @@ import random
 # wx.Memory DC , etc.
 
 USE_BUFFERED_DC = 1
+
 
 class BufferedWindow(wx.Window):
 
@@ -27,7 +28,7 @@ class BufferedWindow(wx.Window):
 
     """
 
-    
+
     def __init__(self, parent, id,
                  pos = wx.DefaultPosition,
                  size = wx.DefaultSize,
@@ -37,13 +38,12 @@ class BufferedWindow(wx.Window):
         wx.EVT_PAINT(self, self.OnPaint)
         wx.EVT_SIZE(self, self.OnSize)
 
-
         # OnSize called to make sure the buffer is initialized.
         # This might result in OnSize getting called twice on some
         # platforms at initialization, but little harm done.
         self.OnSize(None)
 
-    def Draw(self,dc):
+    def Draw(self, dc):
         ## just here as a place holder.
         ## This method should be over-ridden when subclassed
         pass
@@ -56,7 +56,7 @@ class BufferedWindow(wx.Window):
             dc = wx.PaintDC(self)
             dc.DrawBitmap(self._Buffer,0,0)
 
-    def OnSize(self,event):
+    def OnSize(self, event):
         # The Buffer init is done here, to make sure the buffer is always
         # the same size as the Window
         Size  = self.GetClientSizeTuple()
@@ -64,12 +64,12 @@ class BufferedWindow(wx.Window):
         # Make new offscreen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image to
         # a file, or whatever.
-        self._Buffer = wx.EmptyBitmap(Size[0],Size[1])
+        self._Buffer = wx.EmptyBitmap(Size[0], Size[1])
         self.UpdateDrawing()
 
-    def SaveToFile(self,FileName,FileType):
+    def SaveToFile(self, FileName, FileType):
         ## This will save the contents of the buffer
-        ## to the specified file. See the wxWindows docs for 
+        ## to the specified file. See the wxWindows docs for
         ## wx.Bitmap::SaveFile for the details
         self._Buffer.SaveFile(FileName,FileType)
 
@@ -92,10 +92,10 @@ class BufferedWindow(wx.Window):
             dc.SelectObject(self._Buffer)
             self.Draw(dc)
             # update the screen
-            wx.ClientDC(self).DrawBitmap(self._Buffer,0,0)
+            wx.ClientDC(self).DrawBitmap(self._Buffer, 0, 0)
 
 class DrawWindow(BufferedWindow):
-    def __init__(self, parent, id = -1):
+    def __init__(self, parent, id=-1):
         ## Any data the Draw() function needs must be initialized before
         ## calling BufferedWindow.__init__, as it will call the Draw
         ## function.
@@ -103,11 +103,11 @@ class DrawWindow(BufferedWindow):
         self.DrawData = {}
 
         ## create a marker bitmap
-        print "initing the marker"
+        print("initing the marker")
 
-        MaskColor = wx.Colour(254,255,255)
-        
-        self.Marker = wx.EmptyBitmap(40,40)
+        MaskColor = wx.Colour(254, 255, 255)
+
+        self.Marker = wx.EmptyBitmap(40, 40)
         dc = wx.MemoryDC()
         dc.SelectObject(self.Marker)
 
@@ -117,27 +117,27 @@ class DrawWindow(BufferedWindow):
         dc.Clear()
         dc.SetPen(wx.RED_PEN)
         dc.SetBrush(wx.GREEN_BRUSH)
-        dc.DrawPolygon(((20,0),(30,10),(24,24),(40,40),(0,20)))
+        dc.DrawPolygon(((20, 0), (30, 10), (24, 24), (40, 40), (0, 20)))
         dc.EndDrawing()
-        Mask = wx.MaskColour(self.Marker,MaskColor)
 
-        self.Marker.SetMask(Mask)
-        
+        ###FIXME### Mask = wx.Mask(self.Marker, MaskColor)
+        ###FIXME### self.Marker.SetMask(Mask)
+
         BufferedWindow.__init__(self, parent, id)
-        
+
 
     def Draw(self, dc):
-        coords = ((40,40),(100,120),(110,20),(20,200))
+        coords = ((40, 40), (100, 120), (110, 20), (20, 200))
         dc.BeginDrawing()
         dc.SetBackground( wx.Brush("Blue") )
         dc.Clear() # make sure you clear the bitmap!
         try:
             dc.DrawBitmapList(self.Marker, coords, True)
-            print "using DrawBitmapList"
+            print("using DrawBitmapList")
         except AttributeError:
-            print "not using DrawBitmapList"
-            for (x,y) in coords:
-                dc.DrawBitmap(self.Marker,x, y, True)
+            print("not using DrawBitmapList")
+            for (x, y) in coords:
+                dc.DrawBitmap(self.Marker, x, y, True)
         dc.EndDrawing()
 
 
@@ -145,33 +145,33 @@ class TestFrame(wx.Frame):
     def __init__(self):
         wx.Frame.__init__(self, None, -1, "Double Buffered Test",
                          wx.DefaultPosition,
-                         size=(500,500),
+                         size=(500, 500),
                          style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
 
         ## Set up the MenuBar
         MenuBar = wx.MenuBar()
-        
+
         file_menu = wx.Menu()
         ID_EXIT_MENU = wx.NewId()
         file_menu.Append(ID_EXIT_MENU, "E&xit","Terminate the program")
-        wx.EVT_MENU(self, ID_EXIT_MENU, self.OnQuit)
+        self.Bind(wx.EVT_MENU, self.OnQuit, id=ID_EXIT_MENU)
         MenuBar.Append(file_menu, "&File")
-        
+
         draw_menu = wx.Menu()
         ID_DRAW_MENU = wx.NewId()
         BMP_ID = wx.NewId()
-        draw_menu.Append(BMP_ID,'&Save Drawing\tAlt-I','')
-        wx.EVT_MENU(self,BMP_ID, self.SaveToFile)
+        draw_menu.Append(BMP_ID, '&Save Drawing\tAlt-I','')
+        self.Bind(wx.EVT_MENU, self.SaveToFile, id=BMP_ID)
         MenuBar.Append(draw_menu, "&Draw")
 
         self.SetMenuBar(MenuBar)
 
-
         self.Window = DrawWindow(self)
+
 
     def OnQuit(self,event):
         self.Close(True)
-        
+
     def SaveToFile(self,event):
         dlg = wx.FileDialog(self, "Choose a file name to save the image as a PNG to",
                            defaultDir = "",
@@ -182,9 +182,10 @@ class TestFrame(wx.Frame):
             self.Window.SaveToFile(dlg.GetPath(),wx.BITMAP_TYPE_PNG)
         dlg.Destroy()
 
+
 class DemoApp(wx.App):
     def OnInit(self):
-        wx.InitAllImageHandlers() # called so a PNG can be saved      
+        # wx.InitAllImageHandlers() # called so a PNG can be saved
         frame = TestFrame()
         frame.Show(True)
 
@@ -199,25 +200,7 @@ class DemoApp(wx.App):
 
         return True
 
+
 if __name__ == "__main__":
     app = DemoApp(0)
     app.MainLoop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

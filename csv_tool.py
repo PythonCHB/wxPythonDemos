@@ -10,11 +10,14 @@ This is a small, simple app that simply reads, writes, and lets you edit CSV fil
 It's not a spreadsheet, as it doesn't handle any calculations or anything -- just text in CSV files
 
 """
-import sys, os
+
+import os
+import sys
 import csv
 
 import wx
 import wx.grid
+
 
 # empty table:
 empty_table = []
@@ -23,6 +26,7 @@ for i in range(30):
     for j in range(8):
         row.append("")
     empty_table.append(row)
+
 
 class CSVTable(wx.grid.PyGridTableBase):
     def __init__(self, filename=None):
@@ -42,15 +46,15 @@ class CSVTable(wx.grid.PyGridTableBase):
         self.num_rows = len(self.table)
 
     def LoadFromFile(self, filename):
-        
+
         try:
             reader = csv.reader(file(filename, 'rU'),
-                                dialect='excel')# [optional keyword args])
+                                dialect='excel') # [optional keyword args])
         except csv.Error:
             dlg = wx.E
         self.table = [row for row in reader]
         self._comp_size()
-        
+
     def Save(self, filename):
         """
         save the table to the given filename
@@ -59,14 +63,14 @@ class CSVTable(wx.grid.PyGridTableBase):
         self.RemoveEmptyStuff()
         writer = csv.writer(file(filename, 'wb'),
                             dialect='excel')
-        
+
         writer.writerows(self.table)
 
     def RemoveEmptyStuff(self):
         """
         removes empty rows at the end of the table
         and columns at the right of the table
-        
+
         not used right now....
         """
         # strip the extra rows
@@ -118,19 +122,19 @@ class CSVTable(wx.grid.PyGridTableBase):
             return self.table[row][col]
         except IndexError:
             return ""
-    
+
     def SetValue(self, row, col, value):
         """Set the value of a cell"""
         self.table[row][col] = value
 
+
 class ButtonBar(wx.Panel):
     def __init__(self, Grid, parent, *args, **kwargs):
         wx.Panel.__init__(self, parent, *args, **kwargs)
-        
+
         self.Grid = Grid
         self.MainFrame = parent
-        
-        
+
         OpenButton = wx.Button(self, label="Open")
         OpenButton.Bind(wx.EVT_BUTTON, self.OnOpen)
 
@@ -142,14 +146,14 @@ class ButtonBar(wx.Panel):
 
         AutoSizeButton = wx.Button(self, label="AutoSize")
         AutoSizeButton.Bind(wx.EVT_BUTTON, self.OnAutoSize)
-        
+
         S = wx.BoxSizer(wx.HORIZONTAL)
         S.Add(OpenButton, 0, wx.ALL, 5)
         S.Add(SaveButton, 0, wx.ALL, 5)
         S.Add(SaveAsButton, 0, wx.ALL, 5)
         S.Add(AutoSizeButton, 0, wx.ALL, 5)
         self.SetSizer(S)
-        
+
     def OnAutoSize(self, evt=None):
         self.Grid.AutoSize()
 
@@ -166,11 +170,11 @@ class ButtonBar(wx.Panel):
 class CSVGrid(wx.grid.Grid):
     def __init__(self, *args, **kwargs):
         wx.grid.Grid.__init__(self, *args, **kwargs)
-        
+
         # set up the TableBase
         self.table = CSVTable()
         self.SetTable( self.table )
-    
+
     def LoadNewFile(self, filename):
         self.table.LoadFromFile(filename)
         self.SetTable(self.table)
@@ -191,7 +195,7 @@ class CSVFrame(wx.Frame):
         MenuBar = wx.MenuBar()
 
         FileMenu = wx.Menu()
-        
+
         item = FileMenu.Append(wx.ID_EXIT, text = "&Exit")
         self.Bind(wx.EVT_MENU, self.OnQuit, item)
 
@@ -208,7 +212,7 @@ class CSVFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnPrefs, item)
 
         MenuBar.Append(FileMenu, "&File")
-        
+
         HelpMenu = wx.Menu()
 
         item = HelpMenu.Append(wx.ID_HELP, "CSV &Help",
@@ -226,7 +230,7 @@ class CSVFrame(wx.Frame):
         self.grid = CSVGrid(self)
 
         self.ButtonBar = ButtonBar(self.grid, self)
-        
+
         S = wx.BoxSizer(wx.VERTICAL)
         S.Add(self.ButtonBar, 0, wx.EXPAND)
         S.Add(self.grid, 1, wx.EXPAND)
@@ -235,7 +239,7 @@ class CSVFrame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnQuit)
 
         self.CurrentFilename = ""
-    
+
     def OpenFile(self, filename):
         self.grid.LoadNewFile(filename)
         self.CurrentFilename = os.path.abspath(filename)
@@ -244,11 +248,9 @@ class CSVFrame(wx.Frame):
         self.grid.Refresh()
         self.grid.Update()
 
-
-    
     def OnQuit(self,Event):
         self.Destroy()
-        
+
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self,
                                "This is a small program to view\n"
@@ -285,7 +287,7 @@ class CSVFrame(wx.Frame):
             self.grid.SaveFile(self.CurrentFilename)
         else:
             self.OnSaveAs(event)
-            
+
     def OnSaveAs(self, event=None):
         self.CurrentFilename
         if self.CurrentFilename:
@@ -303,7 +305,6 @@ class CSVFrame(wx.Frame):
             self.grid.SaveFile(filename)
         dlg.Destroy()
 
-
     def OnPrefs(self, event):
         dlg = wx.MessageDialog(self,
                                "This would be an preferences Dialog\n"
@@ -311,11 +312,12 @@ class CSVFrame(wx.Frame):
                                "Preferences", wx.OK | wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
-        
+
+
 class MyApp(wx.App):
     def __init__(self, *args, **kwargs):
         wx.App.__init__(self, *args, **kwargs)
-        
+
         # This catches events when the app is asked to activate by some other
         # process
         self.Bind(wx.EVT_ACTIVATE_APP, self.OnActivate)
@@ -340,13 +342,13 @@ class MyApp(wx.App):
             self.GetTopWindow().Raise()
         except:
             pass
-        
+
     def OnActivate(self, event):
         # if this is an activate event, rather than something else, like iconize.
         if event.GetActive():
             self.BringWindowToFront()
         event.Skip()
-    
+
     def OpenFileMessage(self, filename):
         dlg = wx.MessageDialog(None,
                                "This app was just asked to open:\n%s\n"%filename,
@@ -362,23 +364,18 @@ class MyApp(wx.App):
             pass # there was no filename in command line
         else:
             self.frame.OpenFile(filename)
-        
+
     def MacReopenApp(self):
         """Called when the doc icon is clicked, and ???"""
         self.BringWindowToFront()
 
     def MacNewFile(self):
         pass
-    
+
     def MacPrintFile(self, file_path):
         pass
- 
+
 
 if __name__ == "__main__":
     app = MyApp(False)
     app.MainLoop()
-
-
-
-
-

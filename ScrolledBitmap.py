@@ -1,4 +1,4 @@
-#!/usr/bin/env
+#!/usr/bin/env python
 
 """
 Putting an image in a Scrolled Window
@@ -24,7 +24,7 @@ class MyCanvas(wx.ScrolledWindow):
 
         self.Bind(wx.EVT_PAINT, self.OnPaint)
 
-        # an arbitrary rect to draw -- in pixel coords
+        # an arbitrary rect to draw -- in pixel coords of the image
         self.rect = (200, 200, 300, 200)  # x, y, width, height
 
     def OnPaint(self, event):
@@ -42,9 +42,9 @@ class TestFrame(wx.Frame):
     def __init__(self, *args, **kwargs):
         wx.Frame.__init__(self, *args, **kwargs)
 
-        wx.EVT_CLOSE(self, self.OnCloseWindow)
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
-        self.Canvas1 = MyCanvas(self, wx.NewId())
+        self.Canvas = MyCanvas(self)
 
     def OnCloseWindow(self, event):
         self.Destroy()
@@ -57,20 +57,7 @@ class App(wx.App):
         frame.Show(True)
         return True
 
+
 if __name__ == "__main__":
-
     app = App(False)
-
     app.MainLoop()
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,14 +1,11 @@
-#!/usr/bin/env python2.4
-
-import wxversion
-wxversion.select("2.6")
+#!/usr/bin/env python
 
 import wx
-import  wx.stc  as  stc
+import wx.stc as stc
 
 class DemoFrame(wx.Frame):
     """ This window displays a button """
-    def __init__(self, title = "Timer Demo"):
+    def __init__(self, title="Timer Demo"):
         wx.Frame.__init__(self, None , -1, title)#, size = (800,600), style=wx.DEFAULT_FRAME_STYLE|wx.NO_FULL_REPAINT_ON_RESIZE)
 
         self.TextCtrl = stc.StyledTextCtrl(self, wx.NewId())
@@ -24,8 +21,8 @@ class DemoFrame(wx.Frame):
 
         # now set up the timers:
         self.Timer1 = wx.Timer(self)
-        self.Bind(wx.EVT_TIMER, self.OnTimer1, self.Timer1) 
-        #self.Bind(wx.EVT_TIMER, self.OnTimer1, id = self.Timer1.GetId()) 
+        self.Bind(wx.EVT_TIMER, self.OnTimer1, self.Timer1)
+        #self.Bind(wx.EVT_TIMER, self.OnTimer1, id = self.Timer1.GetId())
         #self.Timer1.Bind(wx.EVT_TIMER, self.OnTimer1)
 
         self.Timer2 = wx.Timer(self)
@@ -52,50 +49,49 @@ class DemoFrame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnQuit)
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add((1,1), 1)
-        sizer.Add(StartButton1, 0, wx.ALIGN_CENTER | wx.ALL, 4 )
-        sizer.Add((1,1), 1)
-        sizer.Add(StartButton2, 0, wx.ALIGN_CENTER | wx.ALL, 4 )
-        sizer.Add((1,1), 1)
-        sizer.Add(StopButton, 0, wx.ALIGN_CENTER | wx.ALL, 4 )
-        sizer.Add((1,1), 1)
-        sizer.Add(QuitButton, 0, wx.ALIGN_CENTER | wx.ALL, 4 )
-        sizer.Add((1,1), 1)
+        sizer.Add((1, 1), 1)
+        sizer.Add(StartButton1, 0, wx.ALIGN_CENTER | wx.ALL, 4)
+        sizer.Add((1, 1), 1)
+        sizer.Add(StartButton2, 0, wx.ALIGN_CENTER | wx.ALL, 4)
+        sizer.Add((1, 1), 1)
+        sizer.Add(StopButton, 0, wx.ALIGN_CENTER | wx.ALL, 4)
+        sizer.Add((1, 1), 1)
+        sizer.Add(QuitButton, 0, wx.ALIGN_CENTER | wx.ALL, 4)
+        sizer.Add((1, 1), 1)
         return sizer
 
-    def OnTimer1(self,Event):
-        print "OnTimer1 called"
+    def OnTimer1(self, event):
+        print("OnTimer1 called")
         self.Counter1 += 1
         self.TextCtrl.AddText("Timer1 Output: %i\n"%self.Counter1)
 
-    def OnStart1(self,Event):
+    def OnStart1(self, event):
         self.Timer1.Start(200) # time between events (in milliseconds)
 
-    def OnTimer2(self,Event):
-        print "OnTimer2 called"
+    def OnTimer2(self, event):
+        print("OnTimer2 called")
         self.Counter2 += 1
         self.TextCtrl.AddText("Timer2 Output: %i\n"%self.Counter2)
 
-    def OnStart2(self,Event):
+    def OnStart2(self, event):
         self.Timer2.Start(1000) # time between events (in milliseconds)
 
-    def OnStop(self, Event=None):
+    def OnStop(self, event=None):
         self.Timer1.Stop()
         self.Timer2.Stop()
 
-    def OnMouseDown(self,Event):
+    def OnMouseDown(self, event):
         if self.Timer1.IsRunning():
             self.OnStop()
         else:
-            Event.Skip()
+            event.Skip()
 
-    def OnQuit(self,Event):
+    def OnQuit(self, event):
         self.Destroy()
 
 
-
-app = wx.PySimpleApp(0)
-frame = DemoFrame()
-frame.Show()
-app.MainLoop()
-
+if __name__ == "__main__":
+    app = wx.App(0)
+    frame = DemoFrame()
+    frame.Show()
+    app.MainLoop()

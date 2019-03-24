@@ -5,11 +5,11 @@ A test of using a ClientDC to draw while the mosue is moving
 """
 
 import wx
-print wx.__version__
+print(wx.version())
 import random
 
-class BufferedWindow(wx.Window):
 
+class BufferedWindow(wx.Window):
     """
 
     A Buffered window class.
@@ -22,11 +22,9 @@ class BufferedWindow(wx.Window):
     When the drawing needs to change, you app needs to call the
     UpdateDrawing() method. Since the drawing is stored in a bitmap, you
     can also save the drawing to file by calling the
-    SaveToFile(self,file_name,file_type) method.
+    SaveToFile(self, file_name, file_type) method.
 
     """
-
-    
     def __init__(self, parent, id,
                  pos = wx.DefaultPosition,
                  size = wx.DefaultSize,
@@ -41,7 +39,7 @@ class BufferedWindow(wx.Window):
         # platforms at initialization, but little harm done.
         self.OnSize(None)
 
-    def Draw(self,dc):
+    def Draw(self, dc):
         ## just here as a place holder.
         ## This method should be over-ridden when subclassed
         pass
@@ -49,7 +47,7 @@ class BufferedWindow(wx.Window):
     def OnPaint(self, event):
         # All that is needed here is to draw the buffer to screen
         dc = wx.PaintDC(self)
-        dc.DrawBitmap(self._Buffer,0,0)
+        dc.DrawBitmap(self._Buffer, 0, 0)
 
     def OnSize(self,event):
         # The Buffer init is done here, to make sure the buffer is always
@@ -58,14 +56,14 @@ class BufferedWindow(wx.Window):
 
         # Make sure we don't try to create a 0 size bitmap
         Size = (max(Size[0], 1), max(Size[1], 1))
-        self._Buffer = wx.EmptyBitmap(Size[0],Size[1])
+        self._Buffer = wx.EmptyBitmap(Size[0], Size[1])
         self.UpdateDrawing()
 
-    def SaveToFile(self,FileName,FileType):
+    def SaveToFile(self, FileName, FileType):
         ## This will save the contents of the buffer
-        ## to the specified file. See the wxWindows docs for 
+        ## to the specified file. See the wxWindows docs for
         ## wx.Bitmap::SaveFile for the details
-        self._Buffer.SaveFile(FileName,FileType)
+        self._Buffer.SaveFile(FileName, FileType)
 
     def UpdateDrawing(self):
         """
@@ -84,13 +82,14 @@ class BufferedWindow(wx.Window):
         # update the screen
         wx.ClientDC(self).DrawBitmap(self._Buffer,0,0)
 
+
 class DrawWindow(BufferedWindow):
     def __init__(self, parent, id = -1):
         ## Any data the Draw() function needs must be initialized before
         ## calling BufferedWindow.__init__, as it will call the Draw
         ## function.
         BufferedWindow.__init__(self, parent, id)
-        
+
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_MOTION, self.OnMove)
@@ -108,7 +107,7 @@ class DrawWindow(BufferedWindow):
             self.DrawLine(event, New=False)
         self.StartMove = None
         self.PrevMove = None
-            
+
     def OnMove(self, event):
         if event.Dragging() and event.LeftIsDown() and self.StartMove is not None:
             self.DrawLine(event)
@@ -119,14 +118,12 @@ class DrawWindow(BufferedWindow):
         dc.SetBrush(wx.TRANSPARENT_BRUSH)
         dc.SetLogicalFunction(wx.INVERT)
         if self.PrevMove is not None:
-            print "Drawing Over old line:", self.StartMove, self.PrevMove
+            print("Drawing Over old line:", self.StartMove, self.PrevMove)
             dc.DrawLinePoint(self.StartMove, self.PrevMove)
         self.PrevMove = event.GetPosition()
-        print "Drawing new line:", self.StartMove, self.PrevMove
+        print("Drawing new line:", self.StartMove, self.PrevMove)
         if New:
             dc.DrawLinePoint( self.StartMove, self.PrevMove )
-        
-
 
     def Draw(self, dc):
         coords = ((40,40),(200,220),(210,120),(120,300))
@@ -144,14 +141,23 @@ class TestFrame(wx.Frame):
     def __init__(self):
         wx.Frame.__init__(self, None, -1, "ClientDC Test",
                          wx.DefaultPosition,
-                         size=(500,500),
+                         size=(500, 500),
                          style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
 
         self.Window = DrawWindow(self)
+        self.Window.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+
+        self.Centre()
+
+    def OnKeyDown(self, event):
+        if event.GetKeyCode() == wx.WXK_ESCAPE:
+            self.Close()
+
 
 class DemoApp(wx.App):
     def OnInit(self):
-        wx.InitAllImageHandlers() # called so a PNG can be saved      
+        wx.InitAllImageHandlers() # called so a PNG can be saved
         frame = TestFrame()
         frame.Show(True)
 
@@ -166,26 +172,7 @@ class DemoApp(wx.App):
 
         return True
 
+
 if __name__ == "__main__":
     app = DemoApp(0)
     app.MainLoop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

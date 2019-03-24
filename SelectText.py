@@ -1,14 +1,11 @@
-#!/usr/bin/env python2.3
-
-import wxversion
-wxversion.select("2.5")
+#!/usr/bin/env python
 
 import  wx
 
 BUFFERED = 1
 
-class Shape:
 
+class Shape:
     def HitTest(self, pt):
         rect = self.GetRect()
         return rect.InsideXY(pt.x, pt.y)
@@ -55,29 +52,30 @@ class TextShape(Shape):
         return rect.InsideXY(pt.x, pt.y)
 
 
-    def Draw(self, dc, op = wx.COPY):
-        font = wx.Font(36, wx.MODERN, wx.NORMAL, wx.NORMAL, 0, "Arial")
+    def Draw(self, dc, op=wx.COPY):
+        font = wx.Font(36, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Arial")
         #text1 = "Hi there, this is some text"
-        #textExtent = self.GetFullTextExtent(text1, font)        
+        #textExtent = self.GetFullTextExtent(text1, font)
         dc.SetTextForeground(wx.BLACK)
         dc.SetFont(font)
-        if self.Size is  None:
+        if self.Size is None:
             self.Size = dc.GetTextExtent(self.string)
         dc.DrawText(self.string, self.pos[0], self.pos[1])
+
 
 #----------------------------------------------------------------------
 class MyCanvas(wx.ScrolledWindow):
     def __init__(self, parent, id = -1, size = wx.DefaultSize):
         wx.ScrolledWindow.__init__(self, parent, id, (0, 0), size=size, style=wx.SUNKEN_BORDER | wx.NO_FULL_REPAINT_ON_RESIZE)
-        
+
         self.shapes = []
         self.shape1 = []
         self.shape2 = []
-        
+
         self.dragImage = None
         self.dragShape = None
         self.hiliteShape = None
-        
+
         self.lines = []
         self.maxWidth  = 1000
         self.maxHeight = 1000
@@ -85,12 +83,12 @@ class MyCanvas(wx.ScrolledWindow):
         self.curLine = []
         self.drawing = False
 
-        self.bg_bmp = wx.Bitmap("BG.jpg", wx.BITMAP_TYPE_ANY)      
+        self.bg_bmp = wx.Bitmap("Images/BG.jpg", wx.BITMAP_TYPE_ANY)
         self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
 
-        self.SetScrollbars(80, 25, self.maxWidth/20, self.maxHeight/20)
+        self.SetScrollbars(80, 25, self.maxWidth / 20, self.maxHeight / 20)
 
-#-----------------------------------------------------------------------------------      
+#-----------------------------------------------------------------------------------
 
         if BUFFERED:
             # Initialize the buffer bitmap.  No real DC is needed at this point.
@@ -106,7 +104,6 @@ class MyCanvas(wx.ScrolledWindow):
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_MOTION, self.OnMotion)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
-        
 
     def getWidth(self):
         return self.maxWidth
@@ -122,7 +119,6 @@ class MyCanvas(wx.ScrolledWindow):
             self.PrepareDC(dc)
             self.DoDrawing(dc)
 
-        
     def DoDrawing(self, dc, printing=False):
         dc.BeginDrawing()
 
@@ -130,16 +126,16 @@ class MyCanvas(wx.ScrolledWindow):
         text1 = TextShape("Hi there, this is some text")
         text1.pos = (25, 25)
         self.shapes.append(text1)
- 
+
         bmp = wx.EmptyBitmap(845, 1079)
         shape1 = DragShape(bmp)
         shape1.pos = (125, 55)
-        shape1.fullscreen = False        
+        shape1.fullscreen = False
         self.shapes.append(shape1)
-        
+
         dc = wx.MemoryDC()
         dc.SelectObject(bmp)
-        
+
         bmp2 = wx.Bitmap("Paper.jpg", wx.BITMAP_TYPE_ANY)
         dc.DrawBitmap(bmp2, -14, -15)
 
@@ -154,7 +150,6 @@ class MyCanvas(wx.ScrolledWindow):
         return (event.GetX() + (xView * xDelta),
                 event.GetY() + (yView * yDelta))
 
-   
     # tile the background bitmap
     def TileBackground(self, dc):
         sz = self.GetClientSize()
@@ -171,7 +166,6 @@ class MyCanvas(wx.ScrolledWindow):
                 y = y + h
 
             x = x + w
-
 
     # Go through our list of shapes and draw them in whatever place they are.
     def DrawShapes(self, dc):
@@ -245,12 +239,12 @@ class MyCanvas(wx.ScrolledWindow):
             self.hiliteShape = None
 
 
-        
+
         self.dragShape.pos = (
             self.dragShape.pos[0] + evt.GetPosition()[0] - self.dragStartPos[0],
             self.dragShape.pos[1] + evt.GetPosition()[1] - self.dragStartPos[1]
             )
-            
+
         self.dragShape.shown = True
         self.dragShape.Draw(dc)
         self.dragShape = None
@@ -320,11 +314,12 @@ class MyCanvas(wx.ScrolledWindow):
             # now move it and show it again if needed
             self.dragImage.Move(evt.GetPosition())
             if unhiliteOld or hiliteNew:
-                self.dragImage.Show()    
+                self.dragImage.Show()
+
 
 if __name__ == '__main__':
-    app = wx.PySimpleApp(0)
-    frame = wx.Frame(None,-1,"A Test Frame")
+    app = wx.App(0)
+    frame = wx.Frame(None, -1, "A Test Frame")
     win = MyCanvas(frame)
     frame.Show()
     app.MainLoop()

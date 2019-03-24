@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import wx
+from wx.html import HtmlEasyPrinting
 #import  wx.lib.wxpTag
 
 #-------------------------------------------------------------------
@@ -14,15 +15,15 @@ class ExpandButton(wx.BitmapButton):
     """
     #DownBmp = wx.Bitmap("Images/ArrowDown.png")
     #RightBmp = wx.Bitmap("Images/ArrowRight.png")
-    
+
     def __init__(self, *args, **kwargs):
 
         self.__class__.DownBmp= wx.Bitmap("Images/ArrowDown.png")
         self.__class__.RightBmp = wx.Bitmap("Images/ArrowRight.png")
 
         self.Section = Sections[kwargs.pop("section")]
-        
-        print "Section is:", self.Section
+
+        print("Section is:", self.Section)
         kwargs["bitmap"] = self.RightBmp
         wx.BitmapButton.__init__(self, *args, **kwargs)
 
@@ -30,13 +31,14 @@ class ExpandButton(wx.BitmapButton):
         self.Bind(wx.EVT_BUTTON, self.Clicked)
 
     def Clicked(self, event):
-        print "ExpandButton was clicked!"
+        print("ExpandButton was clicked!")
         if self.Section.Expanded:
             self.Section.Expanded = False
             self.SetBitmapLabel(self.RightBmp)
         else:
             self.Section.Expanded = True
             self.SetBitmapLabel(self.DownBmp)
+
 
 class HTMLSection:
     def __init__(self, header="", text=""):
@@ -51,7 +53,7 @@ class HTMLSection:
             self.Expanded = False
         else:
             self.Expanded = True
- 
+
     def GetHtml(self):
 
         html = []
@@ -109,7 +111,7 @@ Sections = [HTMLSection("A Simple Test", """
             is set, then it it shows the html for the whole thing. If
             not, then it only shows the littel arrrow and the header
             text.
-            
+
             """),
 
             HTMLSection("Still To Do:", """
@@ -121,7 +123,7 @@ Sections = [HTMLSection("A Simple Test", """
 
             <LI> The HTML is pretty mixed in the with code: maybe useing
             a template system would be better?
-            
+
             <LI>We could use a better bitmap for the little arrow. It
             should probalby be alligned better. It's now using the
             <pre>ALIGN=TEXTTOP</pre> flag, but that may not be the best
@@ -132,7 +134,7 @@ Sections = [HTMLSection("A Simple Test", """
             tricky if we bundle the whole thing up in to a single .exe
             file. Maybe you can load a binary bitmap straight into the
             wx.HtmlWindow, but I don't know how.
-            
+
             <LI> The code could be cleaned up in other ways too -- like
             how each section gets generated and added.
 
@@ -144,10 +146,11 @@ Sections = [HTMLSection("A Simple Test", """
 for i, sec in enumerate(Sections):
     sec.SectionNum = i
 
-    
+
 class Printer(HtmlEasyPrinting):
     def __init__(self):
         HtmlEasyPrinting.__init__(self)
+
 
 class MyHTMLWindow(wx.html.HtmlWindow):
 
@@ -177,7 +180,7 @@ class MyHTMLWindow(wx.html.HtmlWindow):
         self.Footer ="\n</BODY>\n</HTML>"
 
         self.Reload()
-        
+
     def OnLinkClicked(self, linkinfo):
         ##This captures a click on any link:
         linktext = linkinfo.GetHref()
@@ -187,7 +190,7 @@ class MyHTMLWindow(wx.html.HtmlWindow):
             SecNum = int(linktext[7:])
             self.Sections[SecNum].OnClick()
             self.Reload()
-       
+
         ## Virtuals in the base class have been renamed with base_ on the front.
         # Use this if you want he usual action
         # self.base_OnLinkClicked(linkinfo)
@@ -200,20 +203,19 @@ class MyHTMLWindow(wx.html.HtmlWindow):
         self.HTML_Code = "\n".join(HTML)
         self.SetPage( self.HTML_Code )
 
-
     def Print(self):
         self.Printer.PrintText(self.HTML_Code,"TestHTML")
 
     def PS_Print(self):
-        print "Using PostScriptDC"
+        print("Using PostScriptDC")
         PData = wx.PrintData()
         PData.SetFilename("TestPS.ps")
         DC = wx.PostScriptDC(PData)
-        print "PPI", DC.GetPPI()
+        print("PPI", DC.GetPPI())
         ## What to do now?
-        
 
-class MyPanel(wx.Panel):   
+
+class MyPanel(wx.Panel):
 
     def __init__(self, *args, **kwargs):
         wx.Panel.__init__(self, *args, **kwargs)
@@ -224,7 +226,7 @@ class MyPanel(wx.Panel):
         PSPrintButton = wx.Button(self, label="PS-Print")
         PSPrintButton.Bind(wx.EVT_BUTTON, self.PS_Print)
 
- 
+
         TopSizer = wx.BoxSizer(wx.HORIZONTAL)
         TopSizer.Add((1,1), 1, wx.GROW)
         TopSizer.Add(PrintButton, 0)
@@ -240,7 +242,6 @@ class MyPanel(wx.Panel):
 
         self.SetSizerAndFit(MainSizer)
 
-
         self.Reload(None)
 
     def Reload(self,event):
@@ -251,7 +252,7 @@ class MyPanel(wx.Panel):
 
     def PS_Print(self,Event):
         self.Html.PS_Print()
-        
+
 #-------------------------------------------------------------------
 
 class MyFrame(wx.Frame):
@@ -261,6 +262,7 @@ class MyFrame(wx.Frame):
         wx.Frame.__init__(self, *args, **kwargs)
         self.panel = MyPanel(self, -1)
 #-------------------------------------------------------------------
+
 
 class MyApp(wx.App):
 
@@ -276,4 +278,3 @@ class MyApp(wx.App):
 if __name__ == "__main__" :
     app = MyApp(0)
     app.MainLoop()
-

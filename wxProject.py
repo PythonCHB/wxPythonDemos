@@ -20,6 +20,7 @@ def MsgDlg(window, string, caption='wxProject', style=wx.YES_NO|wx.CANCEL):
     dlg.Destroy()
     return result
 
+
 class main_window(wx.Frame):
     """wxProject MainFrame."""
     def __init__(self, parent, title):
@@ -30,7 +31,7 @@ class main_window(wx.Frame):
 
         # Set up menu bar for the program.
         self.mainmenu = wx.MenuBar()                  # Create menu bar.
-        
+
         menu = wx.Menu()                              # Make a menu (will be the Project menu)
 
         item = menu.Append(wx.ID_OPEN, '&Open', 'Open project')     # Append a new menu
@@ -66,7 +67,7 @@ class main_window(wx.Frame):
 
 
         # Create the splitter window.
-        splitter = wx.SplitterWindow(self, style=wx.NO_3D|wx.SP_3D)
+        splitter = wx.SplitterWindow(self, style=wx.SP_3D)
         splitter.SetMinimumPaneSize(1)
 
         # Create the tree on the left.
@@ -208,11 +209,11 @@ class main_window(wx.Frame):
                 if go_ahead:
                     self.tree.SetItemBold(self.activeitem, 0)
         return go_ahead
-    
+
     def OnProjectExit(self, event):
         """Quit the program."""
         if not self.close:
-            self.close = True                    
+            self.close = True
             if not self.SaveCurrentFile():
                 self.close = False
             if self.projectdirty and self.close:
@@ -230,8 +231,8 @@ class main_window(wx.Frame):
         """Adds a file to the current project."""
         if not self.CheckRoot():
             return
-          
-        dlg = wx.FileDialog(self, 'Choose a file to add.', '.', '', '*.*', wx.OPEN)
+
+        dlg = wx.FileDialog(self, 'Choose a file to add.', '.', '', '*.*', wx.FD_OPEN)
         if dlg.ShowModal() == wx.ID_OK:
             path = os.path.split(dlg.GetPath())
             self.tree.AppendItem(self.root, path[1])
@@ -294,6 +295,7 @@ class main_window(wx.Frame):
                 self.editor.Clear()
                 self.editor.Enable(0)
 
+
 class App(wx.App):
     """wxProject Application."""
     def OnInit(self):
@@ -304,7 +306,7 @@ class App(wx.App):
             frame.project_open(projfile)
         return True
 
+
 if __name__ == '__main__':
     app = App(0)
     app.MainLoop()
-
