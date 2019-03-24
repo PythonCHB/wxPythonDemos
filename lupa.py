@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 A small program to produce a "magnifying glass" effect over an image.
 
@@ -38,26 +37,22 @@ class MyCanvas(wx.Panel):
         y = max(self.mpos[1] - 20, 0)
         zoomed = None
         try:
-            zoomed = self.bmp.GetSubBitmap((x-self.SampleSize/2,
-                                            y-self.SampleSize/2,
-                                            self.SampleSize,
-                                            self.SampleSize)).ConvertToImage()
+            zoomed = self.bmp.GetSubBitmap(
+                (x - self.SampleSize / 2, y - self.SampleSize / 2,
+                 self.SampleSize, self.SampleSize)).ConvertToImage()
             zoomed.Rescale(self.ZoomedSize, self.ZoomedSize)
             zoomed = zoomed.ConvertToBitmap()
         except wx._core.PyAssertionError:
             zoomed = None
 
-        offscreenBMP = wx.EmptyBitmap(*self.size)
+        offscreenBMP = wx.Bitmap(*self.size)
         self.offDC = wx.MemoryDC()
         self.offDC.SelectObject(offscreenBMP)
         self.offDC.Clear()
-        self.offDC.BeginDrawing()
         self.offDC.DrawBitmap(self.bmp, 0, 0, True)
         if zoomed is not None:
-            self.offDC.DrawBitmap(zoomed,
-                                  x - self.ZoomedSize / 2,
+            self.offDC.DrawBitmap(zoomed, x - self.ZoomedSize / 2,
                                   y - self.ZoomedSize / 2, True)
-        self.offDC.EndDrawing()
         self.dc = wx.PaintDC(self)
         self.dc.Blit(0, 0, self.size[0], self.size[1], self.offDC, 0, 0)
         evt.Skip()
