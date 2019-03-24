@@ -9,6 +9,7 @@ import sys
 print sys.version
 print wx.__version__
 
+
 class DemoFrame(wx.Frame):
 
     """ This window displays a button """
@@ -18,10 +19,10 @@ class DemoFrame(wx.Frame):
 
         self.Bind(wx.EVT_PAINT, self.OnPaint)
 
-        
+
     def OnPaint(self,Event):
         dc = wx.PaintDC(self)
-        
+
         dc.SetBackground(wx.BLUE_BRUSH)
         dc.Clear()
         dc.SetPen(wx.Pen('WHITE', 4, wx.SHORT_DASH))
@@ -33,13 +34,8 @@ class DemoFrame(wx.Frame):
         dc.DrawLine( 0, 300, 400, 300)
 
 
-
-app = wx.App(False)
-frame = DemoFrame(None, size=(400,400))
-frame.Show()
-app.MainLoop()
-
-
-
-
-
+if __name__ == "__main__":
+    app = wx.App(False)
+    frame = DemoFrame(None, size=(400, 400))
+    frame.Show()
+    app.MainLoop()

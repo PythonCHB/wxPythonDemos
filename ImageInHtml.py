@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import wx
-import  wx.lib.wxpTag
+import wx.lib.wxpTag
 
 # The html page as a python string literal
 page = r"""
@@ -29,7 +29,7 @@ page = r"""
 
 class Bitmap1(wx.StaticBitmap):
     """
-    A custom StaticBitmap class that holds your image. 
+    A custom StaticBitmap class that holds your image.
     """
     def __init__(self, *args, **kwargs):
         """
@@ -41,6 +41,7 @@ class Bitmap1(wx.StaticBitmap):
         kwargs['bitmap'] = bmp
         wx.StaticBitmap.__init__(self, *args, **kwargs)
 
+
 class DemoFrame(wx.Frame):
     """ This window displays a HtmlWindow """
     def __init__(self, *args, **kwargs):
@@ -49,7 +50,7 @@ class DemoFrame(wx.Frame):
         htmlwin = wx.html.HtmlWindow(self)
         htmlwin.SetPage(page)
 
-       
+
 class MyApp(wx.App):
     """
     A little test wx.App
@@ -60,13 +61,13 @@ class MyApp(wx.App):
         wx.FileSystem_AddHandler(mfs)
         mfs.AddFile("smalltest.png", smalltest.GetImage(), wx.BITMAP_TYPE_PNG)
 
-
         # Initializing the Frame
         frame = DemoFrame(None, title="HTML Tester Window", size = (500,500))
         self.SetTopWindow(frame)
-        
+
         frame.Show(True)
         return True
+
 
 ## This is the image data itself, created with the img2py utility that
 ## ships with wxPython
@@ -184,4 +185,3 @@ smalltest = PyEmbeddedImage(
 if __name__ == "__main__" :
     app = MyApp(0)
     app.MainLoop()
-

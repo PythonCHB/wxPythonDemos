@@ -17,9 +17,9 @@ Plist = dict(CFBundleDocumentTypes= [dict(CFBundleTypeExtensions=["*"],
 
 APP = ['MacApp.py']
 DATA_FILES = []
-OPTIONS = {'argv_emulation': True, # this puts the names of dropped files into sys.argv when starting the app. 
+OPTIONS = {'argv_emulation': True, # this puts the names of dropped files into sys.argv when starting the app.
            'iconfile': 'MacAppIcon.icns',
-           'plist': Plist, 
+           'plist': Plist,
            }
 
 

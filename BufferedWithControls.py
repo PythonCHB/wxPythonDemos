@@ -63,7 +63,7 @@ class wxBufferedWindow(wx.Window):
         dc.SelectObject(self._Buffer)
         self.Draw(dc)
         self.Refresh() # This forces a Paint event, so the screen gets updated.
-        #self.Update() # If it's not getting updated fast enough, this should force it. 
+        #self.Update() # If it's not getting updated fast enough, this should force it.
 
 class DrawWindow(wxBufferedWindow):
     def __init__(self, parent, id = -1):
@@ -119,7 +119,7 @@ class DrawWindow(wxBufferedWindow):
     def CheckB(self):
         self.ID_SOSO = wx.NewId()
         self.checkB = wx.CheckBox(self, self.ID_SOSO, "test", pos = (50, 50))
-        
+
 class TestFrame(wx.Frame):
     def __init__(self):
         wx.Frame.__init__(self, None, -1, "Double Buffered Test",

@@ -1,7 +1,4 @@
-#!/usr/bin/env python2.5
-
-# Note that I use python2.4 above because my system has 2.4 and 2.4 installed
-
+#!/usr/bin/env python
 
 """
 
@@ -54,9 +51,9 @@ class TestPanel(wx.Panel):
     A Panel class with one or two attached toolbars
 
     """
-    
-    def __init__(self, parent, id = -1, size = wx.DefaultSize,color = "BLUE",NumToolbars = 1):
-        
+
+    def __init__(self, parent, id=-1, size=wx.DefaultSize, color="BLUE", NumToolbars=1):
+
         wx.Panel.__init__(self, parent, id, wx.Point(0, 0), size, wx.SUNKEN_BORDER)
 
         self.WindowColor = color
@@ -64,22 +61,22 @@ class TestPanel(wx.Panel):
         ## Create the vertical sizer for the toolbar and Panel
         box = wx.BoxSizer(wx.VERTICAL)
         tb = self.BuildToolbar1()
-        box.Add(tb,0,wx.ALL | wx.ALIGN_LEFT | wx.EXPAND,4) # add the toolbar to the sizer
+        box.Add(tb, 0, wx.ALL | wx.ALIGN_LEFT | wx.EXPAND, 4) # add the toolbar to the sizer
         if NumToolbars == 2: # Do we want the second toolbar?
             tb = self.BuildToolbar2()
-            box.Add(tb,0,wx.ALL | wx.ALIGN_RIGHT ,4)# This one gets aligned to the right
+            box.Add(tb, 0, wx.ALL | wx.ALIGN_RIGHT , 4) # This one gets aligned to the right
 
-        #Now add a Window to draw stuff to (this could be any wx.Window derived control) 
-        self.DrawWindow = wx.Window(self,-1,wx.DefaultPosition,wx.DefaultSize,wx.SUNKEN_BORDER)
-        box.Add(self.DrawWindow,1,wx.EXPAND)
+        #Now add a Window to draw stuff to (this could be any wx.Window derived control)
+        self.DrawWindow = wx.Window(self, -1, wx.DefaultPosition, wx.DefaultSize, wx.SUNKEN_BORDER)
+        box.Add(self.DrawWindow, 1, wx.EXPAND)
 
         box.Fit(self)
         self.SetAutoLayout(True)
         self.SetSizer(box)
 
         # this connects the OnPaint handler to when the DrawWindow needs to be re-painted
-        wx.EVT_PAINT(self.DrawWindow, self.OnPaint)
-        
+        self.DrawWindow.Bind(wx.EVT_PAINT, self.OnPaint)
+
 
     def BuildToolbar1(self):
 
@@ -90,25 +87,26 @@ class TestPanel(wx.Panel):
         Only one of them is pressed at a time. The SetMOde() method handles this
 
         """
-        
-        tb = wx.ToolBar(self,-1)
+
+        tb = wx.ToolBar(self, -1)
         self.ToolBar = tb
-        tb.SetToolBitmapSize((21,21))# this required for non-standard size buttons on MSW
-        
+        tb.SetToolBitmapSize((21, 21))# this required for non-standard size buttons on MSW
+
         tool = tb.AddTool(wx.ID_ANY, bitmap=GetPlusBitmap(), isToggle=True)
         self.Bind(wx.EVT_TOOL, self.SetMode, tool)
-      
+
         tb.AddTool(ID_ZOOM_OUT_BUTTON, GetMinusBitmap(),isToggle=True)
-        wx.EVT_TOOL(self, ID_ZOOM_OUT_BUTTON, self.SetMode)
-      
+        self.Bind(wx.EVT_TOOL, self.SetMode, id=ID_ZOOM_OUT_BUTTON)
+
         tb.AddTool(ID_MOVE_MODE_BUTTON, GetHandBitmap(),isToggle=True)
-        wx.EVT_TOOL(self, ID_MOVE_MODE_BUTTON, self.SetMode)
-      
+        self.Bind(wx.EVT_TOOL, self.SetMode, id=ID_MOVE_MODE_BUTTON)
+
         tb.AddSeparator()
-      
-        tb.AddControl(wx.Button(tb, ID_TEST_BUTTON, "Button",wx.DefaultPosition, wx.DefaultSize))
-        wx.EVT_BUTTON(self, ID_TEST_BUTTON, self.ButtonAction)
-                
+
+        tb.AddControl(wx.Button(tb, ID_TEST_BUTTON, "Button", wx.DefaultPosition, wx.DefaultSize))
+        self.Bind(wx.EVT_TOOL, self.SetMode, id=ID_MOVE_MODE_BUTTON)
+        self.Bind(wx.EVT_BUTTON, self.ButtonAction, id=ID_TEST_BUTTON)
+
         tb.Realize()
 
         return tb
@@ -122,46 +120,46 @@ class TestPanel(wx.Panel):
         It also has a custom separator, created by adding a tall skinny bitmap.
 
         """
-        
-        tb = wx.ToolBar(self,-1)
+
+        tb = wx.ToolBar(self, -1)
         self.ToolBar2 = tb
-        tb.SetToolBitmapSize((21,21))# this required for non-standard size buttons on MSW
+        tb.SetToolBitmapSize((21, 21))# this required for non-standard size buttons on MSW
 
         tb.AddTool(ID_ZOOM_IN_BUTTON2, GetPlusBitmap(),isToggle=True)
-        wx.EVT_TOOL(self, ID_ZOOM_IN_BUTTON2, self.ButtonPress2)
-      
+        self.Bind(wx.EVT_TOOL, self.ButtonPress2, id=ID_ZOOM_IN_BUTTON2)
+
         tb.AddTool(ID_ZOOM_OUT_BUTTON2, GetMinusBitmap(),isToggle=True)
-        wx.EVT_TOOL(self, ID_ZOOM_OUT_BUTTON2, self.ButtonPress2)
-      
+        self.Bind(wx.EVT_TOOL, self.ButtonPress2, id=ID_ZOOM_OUT_BUTTON2)
+
         tb.AddTool(ID_MOVE_MODE_BUTTON2, GetHandBitmap(),isToggle=True)
-        wx.EVT_TOOL(self, ID_MOVE_MODE_BUTTON2, self.ButtonPress2)
-      
+        self.Bind(wx.EVT_TOOL, self.ButtonPress2, id=ID_MOVE_MODE_BUTTON2)
+
         # a way to do a custom separator
         tb.AddControl(wx.StaticBitmap(tb, -1, GetSeparatorBitmap(), wx.DefaultPosition, wx.DefaultSize))
-      
+
         tb.AddControl(wx.Button(tb, ID_TEST_BUTTON2, "Button",wx.DefaultPosition, wx.DefaultSize))
-        wx.EVT_BUTTON(self, ID_TEST_BUTTON2, self.ButtonPress2)
+        self.Bind(wx.EVT_BUTTON, self.ButtonPress2, id=ID_TEST_BUTTON2)
 
         tb.Realize()
 
         return tb
 
     def ButtonPress2(self,event):
-        print "A button was pressed on the second toolbar of the %s Panel"%self.WindowColor
+        print("A button was pressed on the second toolbar of the %s Panel" %self.WindowColor)
 
     def SetMode(self,event):
         for id in [ID_ZOOM_IN_BUTTON,ID_ZOOM_OUT_BUTTON,ID_MOVE_MODE_BUTTON]:
             self.ToolBar.ToggleTool(id,0)
         self.ToolBar.ToggleTool(event.GetId(),1)
         if event.GetId() == ID_ZOOM_IN_BUTTON:
-            print "mode set to Zoom In in the %s Canvas"%self.WindowColor
+            print("mode set to Zoom In in the %s Canvas" %self.WindowColor)
         elif event.GetId() == ID_ZOOM_OUT_BUTTON:
-            print "mode set to Zoom Out in the %s Canvas"%self.WindowColor
+            print("mode set to Zoom Out in the %s Canvas" %self.WindowColor)
         elif event.GetId() == ID_MOVE_MODE_BUTTON:
-            print "mode set to Move in the %s Canvas"%self.WindowColor
+            print("mode set to Move in the %s Canvas" %self.WindowColor)
 
     def ButtonAction(self,event):
-        print "Button clicked in the %s Canvas"%self.WindowColor
+        print("Button clicked in the %s Canvas" %self.WindowColor)
         pass
 
     def OnPaint(self,event):
@@ -171,48 +169,48 @@ class TestPanel(wx.Panel):
         dc.Clear()
         dc.EndDrawing()
 
+
 class TestFrame(wx.Frame):
     def __init__(self,parent, id,title,position,size):
         wx.Frame.__init__(self,parent, id,title,position, size)
-        
-
-        wx.EVT_CLOSE(self, self.OnCloseWindow)
 
 
-        Canvas1 = TestPanel(self,color = "RED")
-        Canvas2 = TestPanel(self,color = "BLUE",NumToolbars = 2)
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
+        Canvas1 = TestPanel(self, color="RED")
+        Canvas2 = TestPanel(self, color="BLUE", NumToolbars = 2)
 
         #Build the Toolbar
-        tb = self.CreateToolBar(wx.TB_HORIZONTAL|wx.NO_BORDER)
+        tb = self.CreateToolBar(wx.TB_HORIZONTAL | wx.NO_BORDER)
         self.ToolBar = tb
         tb.SetToolBitmapSize((21,21))# this required for non-standard size buttons on MSW
-      
+
         tb.AddTool(ID_ZOOM_IN_BUTTON, GetPlusBitmap(),isToggle=True)
-        wx.EVT_TOOL(self, ID_ZOOM_IN_BUTTON, self.SetMode)
-      
+        self.Bind(wx.EVT_TOOL, self.SetMode, id=ID_ZOOM_IN_BUTTON)
+
         tb.AddTool(ID_ZOOM_OUT_BUTTON, GetMinusBitmap(),isToggle=True)
-        wx.EVT_TOOL(self, ID_ZOOM_OUT_BUTTON, self.SetMode)
-      
+        self.Bind(wx.EVT_TOOL, self.SetMode, id=ID_ZOOM_OUT_BUTTON)
+
         tb.AddTool(ID_MOVE_MODE_BUTTON, GetHandBitmap(),isToggle=True)
-        wx.EVT_TOOL(self, ID_MOVE_MODE_BUTTON, self.SetMode)
-      
-        tb.AddSeparator()
-      
-        tb.AddControl(wx.Button(tb, ID_TEST_BUTTON, "Button",wx.DefaultPosition, wx.DefaultSize))
-        wx.EVT_BUTTON(self, ID_TEST_BUTTON, self.ButtonAction)
+        self.Bind(wx.EVT_TOOL, self.SetMode, id=ID_MOVE_MODE_BUTTON)
 
         tb.AddSeparator()
-      
+
+        tb.AddControl(wx.Button(tb, ID_TEST_BUTTON, "Button",wx.DefaultPosition, wx.DefaultSize))
+        self.Bind(wx.EVT_BUTTON, self.ButtonAction, id=ID_TEST_BUTTON)
+
+        tb.AddSeparator()
+
         tb.AddControl(wx.StaticText(tb, -1, "A Frame Managed Toolbar", wx.DefaultPosition, wx.DefaultSize))
-                
+
         tb.Realize()
 
 
         ## Create the horizontal sizer for the two panels
         box = wx.BoxSizer(wx.HORIZONTAL)
 
-        box.Add(Canvas1,1,wx.EXPAND)
-        box.Add(Canvas2,2,wx.EXPAND)
+        box.Add(Canvas1, 1, wx.EXPAND)
+        box.Add(Canvas2, 2, wx.EXPAND)
 
         #box.Fit(self)
         self.SetAutoLayout(True)
@@ -225,24 +223,26 @@ class TestFrame(wx.Frame):
             self.ToolBar.ToggleTool(id,0)
         self.ToolBar.ToggleTool(event.GetId(),1)
         if event.GetId() == ID_ZOOM_IN_BUTTON:
-            print "mode set to Zoom In in the Frame"
+            print("mode set to Zoom In in the Frame")
         elif event.GetId() == ID_ZOOM_OUT_BUTTON:
-            print "mode set to Zoom Out in the Frame"
+            print("mode set to Zoom Out in the Frame")
         elif event.GetId() == ID_MOVE_MODE_BUTTON:
-            print "mode set to Move in the Frame"
+            print("mode set to Move in the Frame")
 
     def ButtonAction(self,event):
-        print "Button clicked in the Frame"
+        print("Button clicked in the Frame")
         pass
 
     def OnCloseWindow(self, event):
         self.Destroy()
-    
+
+
 class App(wx.App):
     def OnInit(self):
         frame = TestFrame(None, -1, "Toolbar Test",wx.DefaultPosition,(550,200))
         self.SetTopWindow(frame)
         return True
+
 
 # The data for the icons. These functions were generated by img2py,
 # which comes with the wxPython distribution, in the tools directory.
@@ -304,21 +304,7 @@ def GetSeparatorBitmap():
 
 def GetSeparatorImage():
     return wx.ImageFromBitmap(GetSeparatorBitmap())
-     
+
 if __name__ == "__main__":
     app = App(0)
     app.MainLoop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,14 +1,12 @@
-#!/usr/bin/env python2.4
-
-import wxversion
-wxversion.select("2.6")
+#!/usr/bin/env python
 
 import wx
-import  wx.stc  as  stc
+import wx.stc as stc
+
 
 class DemoFrame(wx.Frame):
     """ This window displays a button """
-    def __init__(self, title = "Timer Demo"):
+    def __init__(self, title="Timer Demo"):
         wx.Frame.__init__(self, None , -1, title)#, size = (800,600), style=wx.DEFAULT_FRAME_STYLE|wx.NO_FULL_REPAINT_ON_RESIZE)
 
         self.TextCtrl = stc.StyledTextCtrl(self, wx.NewId())
@@ -41,38 +39,38 @@ class DemoFrame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnQuit)
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        sizer.Add((1,1), 1)
-        sizer.Add(StartButton, 0, wx.ALIGN_CENTER | wx.ALL, 4 )
-        sizer.Add((1,1), 1)
-        sizer.Add(StopButton, 0, wx.ALIGN_CENTER | wx.ALL, 4 )
-        sizer.Add((1,1), 1)
-        sizer.Add(QuitButton, 0, wx.ALIGN_CENTER | wx.ALL, 4 )
-        sizer.Add((1,1), 1)
+        sizer.Add((1, 1), 1)
+        sizer.Add(StartButton, 0, wx.ALIGN_CENTER | wx.ALL, 4)
+        sizer.Add((1, 1), 1)
+        sizer.Add(StopButton, 0, wx.ALIGN_CENTER | wx.ALL, 4)
+        sizer.Add((1, 1), 1)
+        sizer.Add(QuitButton, 0, wx.ALIGN_CENTER | wx.ALL, 4)
+        sizer.Add((1, 1), 1)
         return sizer
 
-    def OnTimer(self,Event):
+    def OnTimer(self, event):
         self.Counter += 1
         self.TextCtrl.AddText("Sentence number: %i\n"%self.Counter)
 
-    def OnStart(self,Event):
+    def OnStart(self, event):
         self.Timer.Start(500) # time between events (in milliseconds)
 
-    def OnStop(self, Event=None):
+    def OnStop(self, event=None):
         self.Timer.Stop()
 
-    def OnMouseDown(self,Event):
+    def OnMouseDown(self, event):
         if self.Timer.IsRunning():
             self.OnStop()
         else:
-            Event.Skip()
+            event.Skip()
 
-    def OnQuit(self,Event):
+    def OnQuit(self, event):
         self.Destroy()
 
 
-
-app = wx.PySimpleApp(0)
-frame = DemoFrame()
-frame.Show()
-app.MainLoop()
+if __name__ == "__main__":
+    app = wx.App(0)
+    frame = DemoFrame()
+    frame.Show()
+    app.MainLoop()
 

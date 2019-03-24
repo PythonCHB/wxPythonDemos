@@ -43,6 +43,7 @@ import wx.html
 
 #-------------------------------------------------------------------
 
+
 class MyHTMLWindow(wx.html.HtmlWindow):
     """
     Not much need for a class here -- but maybe they'll be moreto add later
@@ -50,10 +51,11 @@ class MyHTMLWindow(wx.html.HtmlWindow):
     def __init__(self, parent):
         wx.html.HtmlWindow.__init__(self, parent,
                                     style=wx.VSCROLL|wx.ALWAYS_SHOW_SB)
-        
+
         if "gtk2" in wx.PlatformInfo:
             self.SetStandardFonts()
         self.Show()
+
 
 class MyFrame(wx.Frame):
 
@@ -74,9 +76,9 @@ class MyFrame(wx.Frame):
         S = wx.BoxSizer(wx.HORIZONTAL)
         S.Add(self.InputWindow, 3, wx.EXPAND)
         S.Add(self.htwindow, 4, wx.EXPAND)
-        
+
         self.Printer = wx.html.HtmlEasyPrinting()
-        
+
         MenuBar = wx.MenuBar()
 
         FileMenu = wx.Menu()
@@ -95,9 +97,9 @@ class MyFrame(wx.Frame):
 
     def OnTextChanged(self, evt=None):
         """
-        Updates the HTML: called whenever there is a change in the input 
+        Updates the HTML: called whenever there is a change in the input
             text field.
-        
+
         Keeps the HtmlWindow scrolled to the same position as it was
         """
         pos = self.htwindow.GetViewStart()
@@ -115,12 +117,12 @@ class MyFrame(wx.Frame):
     def OnQuit(self,Event):
         self.Destroy()
 
-class MyApp(wx.App):
 
+class MyApp(wx.App):
     def OnInit(self):
-        frame = MyFrame(None, title="HTML Tester Window", size = (600,500))
+        frame = MyFrame(None, title="HTML Tester Window", size=(600, 500))
         self.SetTopWindow(frame)
-        frame.Size = (900,500)
+        frame.Size = (900, 500)
         frame.Centre()
         frame.Show(True)
         return True
@@ -129,4 +131,3 @@ class MyApp(wx.App):
 if __name__ == "__main__" :
     app = MyApp(0)
     app.MainLoop()
-

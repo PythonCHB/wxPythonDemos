@@ -9,14 +9,15 @@ A wx component for a resazable window that holds an image
 
 import wx
 
+
 class ImageWindow(wx.Window):
     """
     ImageWindow(Image, *args, **kwargs)
-    
+
     Image: A wx.Image
     *args and **kwargs are passed in to wx.Window
     """
-    
+
     def __init__(self, Image, *args, **kwargs):
         wx.Window.__init__(self, *args, **kwargs)
 
@@ -33,7 +34,7 @@ class ImageWindow(wx.Window):
     def OnPaint(self, event):
         dc = wx.PaintDC(self)
         dc.DrawBitmap(self._buffer, 0, 0)
-    
+
     def OnSize(self, event):
         w, h = self.GetSize()
         if not self.Proportional:
@@ -58,12 +59,15 @@ class ImageWindow(wx.Window):
             dc.SetBackground(wx.Brush(self.BackgroundColor))
             dc.Clear()
             x = (w - NewW) / 2
-            y = (h - NewH) / 2            
+            y = (h - NewH) / 2
             dc.DrawBitmap(wx.BitmapFromImage(Img), x, y)
         self.Refresh(False)
 
+
 if __name__ == "__main__":
     import TestImage
+
+
     class TestFrame(wx.Frame):
         def __init__(self, *args, **kwargs):
             wx.Frame.__init__(self, *args, **kwargs)
@@ -84,7 +88,8 @@ if __name__ == "__main__":
             box.Add(IW, 1, wx.ALL | wx.EXPAND, 10)
 
             self.SetSizer(box)
-            
+
+
     class App(wx.App):
         def OnInit(self):
             frame = TestFrame(None, title="ImageWindow Test", size=(300, 300))
@@ -94,5 +99,3 @@ if __name__ == "__main__":
 
     app = App(False)
     app.MainLoop()
-     
-

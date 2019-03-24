@@ -1,7 +1,4 @@
-#!/usr/bin/env python2.4
-
-# I like to put the python version on the #! line,
-# so that I can have multiple versions installed.
+#!/usr/bin/env python
 
 """
 
@@ -12,14 +9,15 @@ Pythonic wxPython
 
 import wx
 
-class DemoPanel(wx.Panel):
-    def __init__(self, Parent, *args, **kwargs):
-        wx.Panel.__init__(self, Parent, *args, **kwargs)
 
-        self.Parent = Parent
+class DemoPanel(wx.Panel):
+    def __init__(self, parent, *args, **kwargs):
+        wx.Panel.__init__(self, parent, *args, **kwargs)
+
+        self.parent = parent
 
         NothingBtn = wx.Button(self, label="Do Nothing with a long label")
-        NothingBtn.Bind(wx.EVT_BUTTON, self.DoNothing )
+        NothingBtn.Bind(wx.EVT_BUTTON, self.DoNothing)
 
         MsgBtn = wx.Button(self, label="Send Message")
         MsgBtn.Bind(wx.EVT_BUTTON, self.OnMsgBtn )
@@ -32,7 +30,7 @@ class DemoPanel(wx.Panel):
 
     def DoNothing(self, event=None):
         pass
-    
+
     def OnMsgBtn(self, event=None):
         dlg = wx.MessageDialog(self,
                                message='A completely useless message',
@@ -41,6 +39,7 @@ class DemoPanel(wx.Panel):
                                )
         dlg.ShowModal()
         dlg.Destroy()
+
 
 class DemoFrame(wx.Frame):
     """ This window displays a button """
@@ -51,7 +50,7 @@ class DemoFrame(wx.Frame):
         MenuBar = wx.MenuBar()
 
         FileMenu = wx.Menu()
-        
+
         item = FileMenu.Append(wx.ID_EXIT, text="&Quit")
         self.Bind(wx.EVT_MENU, self.OnQuit, item)
 
@@ -66,7 +65,9 @@ class DemoFrame(wx.Frame):
     def OnQuit(self, event=None):
         self.Close()
 
-app = wx.App()
-frame = DemoFrame(None, title="Micro App")
-frame.Show()
-app.MainLoop()
+
+if __name__ == "__main__":
+    app = wx.App(0)
+    frame = DemoFrame(None, title="Micro App")
+    frame.Show()
+    app.MainLoop()
