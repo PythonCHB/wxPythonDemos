@@ -12,14 +12,14 @@ class DemoFrame(wx.Frame):
 
         FileMenu = wx.Menu()
 
-        item = FileMenu.Append(wx.ID_ANY, text = "&Open")
+        item = FileMenu.Append(wx.ID_ANY, item="&Open")
 
         self.Bind(wx.EVT_MENU, self.OnOpen, item)
 
-        item = FileMenu.Append(wx.ID_PREFERENCES, text = "&Preferences")
+        item = FileMenu.Append(wx.ID_PREFERENCES, item="&Preferences")
         self.Bind(wx.EVT_MENU, self.OnPrefs, item)
 
-        item = FileMenu.Append(wx.ID_EXIT, text = "&Exit")
+        item = FileMenu.Append(wx.ID_EXIT, item="&Exit")
 
         self.Bind(wx.EVT_MENU, self.OnQuit, item)
 
