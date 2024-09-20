@@ -54,8 +54,8 @@ class Game:
 class GridGeom:
     def __init__(self, w, h, num_catagories=6, num_questions=5):
 
-        self.box_w = w / num_catagories
-        self.box_h = h / (num_questions + 1)
+        self.box_w = int(w / num_catagories)
+        self.box_h = int(h / (num_questions + 1))
         self.num_cat = num_catagories
         self.num_ques = num_questions
 
@@ -71,8 +71,8 @@ class GridGeom:
                 wx.FONTWEIGHT_BOLD,
             ), )
         w, h = dc.GetTextExtent("500")
-        self.text_off_x = (self.box_w - w) / 2
-        self.text_off_y = (self.box_h - h) / 2
+        self.text_off_x = int((self.box_w - w) / 2)
+        self.text_off_y = int((self.box_h - h) / 2)
 
 
 class GridWindow(wx.Window):
